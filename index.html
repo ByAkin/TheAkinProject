@@ -300,8 +300,12 @@ yet—and that's part of the project.
 </section>
 
 <footer>
-© 2026 The Akin Project
+© <span id="year"></span> The Akin Project
 </footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
 
 </div>
 
