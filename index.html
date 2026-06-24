@@ -320,6 +320,17 @@ footer{
     font-weight:700;
     color:white;
 }
+
+    .reveal{
+    opacity:0;
+    transform:translateY(30px);
+    transition:all 0.8s ease;
+}
+
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
     
 </style>
 </head>
@@ -463,7 +474,7 @@ Testing ideas, launching projects, and learning what works.
 </h2>
 </section>
 
-    <section class="status-section">
+    <section class="status-section reveal">
     <span class="status-tag">LIVE STATUS</span>
 
     <h2>Building In Public</h2>
@@ -519,5 +530,23 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
 </div>
 
+    <script>
+const reveals = document.querySelectorAll('.reveal');
+
+function revealOnScroll(){
+    reveals.forEach((element)=>{
+        const windowHeight = window.innerHeight;
+        const elementTop = element.getBoundingClientRect().top;
+
+        if(elementTop < windowHeight - 100){
+            element.classList.add('active');
+        }
+    });
+}
+
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+</script>
+    
 </body>
 </html>
