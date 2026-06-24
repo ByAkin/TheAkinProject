@@ -263,6 +263,63 @@ footer{
 }
 
 }
+
+    .status-section{
+    width:88%;
+    max-width:1000px;
+    margin:100px auto;
+    text-align:center;
+}
+
+.status-tag{
+    display:inline-block;
+    padding:8px 14px;
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:999px;
+    font-size:12px;
+    letter-spacing:1px;
+    color:#aaa;
+    margin-bottom:18px;
+}
+
+.status-section h2{
+    font-size:clamp(2rem,5vw,3rem);
+    margin-bottom:40px;
+    color:white;
+}
+
+.status-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:20px;
+}
+
+.status-card{
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px;
+    padding:30px 20px;
+    transition:.3s ease;
+}
+
+.status-card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(255,255,255,0.2);
+}
+
+.status-card h3{
+    color:#888;
+    font-size:14px;
+    margin-bottom:12px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+}
+
+.status-card p{
+    font-size:2rem;
+    font-weight:700;
+    color:white;
+}
     
 </style>
 </head>
@@ -406,6 +463,36 @@ Testing ideas, launching projects, and learning what works.
 </h2>
 </section>
 
+    <section class="status-section">
+    <span class="status-tag">LIVE STATUS</span>
+
+    <h2>Building In Public</h2>
+
+    <div class="status-grid">
+
+        <div class="status-card">
+            <h3>Day</h3>
+            <p>2</p>
+        </div>
+
+        <div class="status-card">
+            <h3>Members</h3>
+            <p>2</p>
+        </div>
+
+        <div class="status-card">
+            <h3>Projects</h3>
+            <p>0</p>
+        </div>
+
+        <div class="status-card">
+            <h3>Consistency</h3>
+            <p>✅</p>
+        </div>
+
+    </div>
+</section>
+    
     <section class="quote">
 <h2>
 What Happens If We Don't Quit?
