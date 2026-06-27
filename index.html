@@ -598,6 +598,17 @@ revealOnScroll();
 const c = document.getElementById('bg');
 const ctx = c.getContext('2d');
 let W, H, pts;
+let mouse = { x: -9999, y: -9999 };
+
+document.addEventListener('mousemove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+document.addEventListener('mouseleave', () => {
+  mouse.x = -9999;
+  mouse.y = -9999;
+});
 
 function resize(){
   W = c.width = innerWidth;
@@ -606,7 +617,7 @@ function resize(){
 
 function init(){
   resize();
-  pts = Array.from({length:60}, () => ({
+  pts = Array.from({length:80}, () => ({
     x: Math.random()*W,
     y: Math.random()*H,
     vx: (Math.random()-.5)*.4,
@@ -618,14 +629,42 @@ function init(){
 function draw(){
   ctx.clearRect(0,0,W,H);
 
+  pts.forEach(p => {
+    const dx = mouse.x - p.x;
+    const dy = mouse.y - p.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+
+    if(dist < 180){
+      const force = (180 - dist) / 180 * 0.04;
+      p.vx += dx / dist * force;
+      p.vy += dy / dist * force;
+    }
+
+    const speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+    if(speed > 2){
+      p.vx = (p.vx/speed)*2;
+      p.vy = (p.vy/speed)*2;
+    }
+
+    p.x += p.vx;
+    p.y += p.vy;
+    if(p.x<0||p.x>W) p.vx*=-1;
+    if(p.y<0||p.y>H) p.vy*=-1;
+  });
+
   for(let i=0;i<pts.length;i++){
     for(let j=i+1;j<pts.length;j++){
-      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+      const dx=pts[i].x-pts[j].x;
+      const dy=pts[i].y-pts[j].y;
       const d=Math.sqrt(dx*dx+dy*dy);
-      if(d<120){
+      if(d<130){
+        const mx=(pts[i].x+pts[j].x)/2;
+        const my=(pts[i].y+pts[j].y)/2;
+        const mdist=Math.sqrt((mouse.x-mx)**2+(mouse.y-my)**2);
+        const boost=mdist<200?(1-mdist/200)*0.4:0;
         ctx.beginPath();
-        ctx.strokeStyle=`rgba(182,216,0,${(1-d/120)*0.15})`;
-        ctx.lineWidth=1;
+        ctx.strokeStyle=`rgba(182,216,0,${(1-d/130)*0.15+boost})`;
+        ctx.lineWidth=mdist<200?1.5:1;
         ctx.moveTo(pts[i].x,pts[i].y);
         ctx.lineTo(pts[j].x,pts[j].y);
         ctx.stroke();
@@ -634,14 +673,14 @@ function draw(){
   }
 
   pts.forEach(p => {
+    const dx=mouse.x-p.x;
+    const dy=mouse.y-p.y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    const near=dist<150;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
-    ctx.fillStyle='rgba(182,216,0,0.35)';
+    ctx.arc(p.x, p.y, near?p.r*1.8:p.r, 0, Math.PI*2);
+    ctx.fillStyle=near?'rgba(182,216,0,0.8)':'rgba(182,216,0,0.35)';
     ctx.fill();
-    p.x += p.vx;
-    p.y += p.vy;
-    if(p.x<0||p.x>W) p.vx*=-1;
-    if(p.y<0||p.y>H) p.vy*=-1;
   });
 
   requestAnimationFrame(draw);
