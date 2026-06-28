@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap — The Akin Project</title>
+
+<style>
+
+:root{
+    --accent:#B6D800;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,system-ui,sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#0a0a0a;
+    color:white;
+    line-height:1.6;
+    overflow-x:hidden;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:110px 24px 0;
+}
+
+nav{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 40px;
+    background:rgba(10,10,10,0.12);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.logo{
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:1px;
+    color:#B6D800;
+    text-decoration:none;
+}
+
+.links{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.links a{
+    color:#bbb;
+    text-decoration:none;
+    transition:all 0.3s ease;
+}
+
+.links a:hover{
+    color:#B6D800;
+    transform:translateY(-1px);
+}
+
+.nav-discord{
+    padding:8px 14px;
+    border-radius:10px;
+    background:#5865F2;
+    color:white !important;
+    font-weight:600;
+    text-decoration:none;
+    transition:all 0.3s ease;
+}
+
+.nav-discord:hover{
+    background:#B6D800;
+    color:black !important;
+    transform:translateY(-2px);
+}
+
+/* HERO */
+.page-hero{
+    padding:80px 0 60px;
+}
+
+.page-hero .tag{
+    display:inline-block;
+    padding:8px 14px;
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:999px;
+    font-size:12px;
+    letter-spacing:1px;
+    color:#B6D800;
+    margin-bottom:20px;
+}
+
+.page-hero h1{
+    font-size:clamp(2.5rem,6vw,4.5rem);
+    line-height:1.1;
+    margin-bottom:16px;
+}
+
+.page-hero p{
+    font-size:1.1rem;
+    color:#aaa;
+    max-width:600px;
+}
+
+/* TIMELINE */
+.timeline{
+    padding:60px 0 120px;
+    position:relative;
+}
+
+.timeline::before{
+    content:'';
+    position:absolute;
+    left:24px;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:linear-gradient(to bottom, #B6D800, rgba(182,216,0,0.1));
+}
+
+.timeline-item{
+    display:flex;
+    gap:40px;
+    margin-bottom:50px;
+    position:relative;
+}
+
+.timeline-dot{
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.2rem;
+    flex-shrink:0;
+    position:relative;
+    z-index:1;
+}
+
+.dot-done{
+    background:#B6D800;
+    box-shadow:0 0 20px rgba(182,216,0,0.4);
+}
+
+.dot-active{
+    background:#1a1a1a;
+    border:2px solid #B6D800;
+    box-shadow:0 0 20px rgba(182,216,0,0.2);
+}
+
+.dot-soon{
+    background:#1a1a1a;
+    border:2px solid #333;
+}
+
+.timeline-content{
+    background:#111;
+    border:1px solid #222;
+    border-radius:18px;
+    padding:24px 28px;
+    flex:1;
+    transition:.3s;
+}
+
+.timeline-content:hover{
+    border-color:#B6D800;
+    transform:translateX(5px);
+}
+
+.timeline-content .status{
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:8px;
+    font-weight:600;
+}
+
+.status-done{ color:#B6D800; }
+.status-active{ color:#5865F2; }
+.status-soon{ color:#555; }
+
+.timeline-content h3{
+    font-size:1.2rem;
+    margin-bottom:8px;
+}
+
+.timeline-content p{
+    color:#777;
+    font-size:0.95rem;
+}
+
+/* REVEAL */
+.reveal{
+    opacity:0;
+    transform:translateY(30px);
+    transition:all 0.8s ease;
+}
+
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* FOOTER */
+footer{
+    border-top:1px solid #222;
+    padding:40px 0;
+    text-align:center;
+    color:#777;
+}
+
+.container{ position:relative; z-index:1; }
+
+@media(max-width:700px){
+    nav{
+        flex-direction:column;
+        gap:15px;
+    }
+    .links{
+        text-align:center;
+    }
+    .links a{
+        margin:0 10px;
+    }
+    .timeline::before{
+        left:20px;
+    }
+    .timeline-dot{
+        width:42px;
+        height:42px;
+    }
+    .timeline-item{
+        gap:20px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="bg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
+<div class="container">
+
+<nav>
+    <a href="/" class="logo">AKIN</a>
+    <div class="links">
+        <a href="/roadmap.html">Roadmap</a>
+        <a href="https://www.youtube.com/@The_Akin_Project">YouTube</a>
+        <a href="https://discord.gg/kYnNsAgM" class="nav-discord">Discord</a>
+    </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero reveal">
+    <span class="tag">BUILDING IN PUBLIC</span>
+    <h1>Where We're Going.</h1>
+    <p>This is the honest, unfiltered roadmap of The Akin Project. Updated as we grow.</p>
+</section>
+
+<!-- TIMELINE -->
+<div class="timeline">
+
+    <div class="timeline-item reveal">
+        <div class="timeline-dot dot-done">✅</div>
+        <div class="timeline-content">
+            <span class="status status-done">Done</span>
+            <h3>Launch Discord Server</h3>
+            <p>The Akin Project community went live. First members joined.</p>
+        </div>
+    </div>
+
+    <div class="timeline-item reveal">
+        <div class="timeline-dot dot-done">✅</div>
+        <div class="timeline-content">
+            <span class="status status-done">Done</span>
+            <h3>Landing Page Live</h3>
+            <p>Built and shipped the website from scratch. No templates.</p>
+        </div>
+    </div>
+
+    <div class="timeline-item reveal">
+        <div class="timeline-dot dot-done">✅</div>
+        <div class="timeline-content">
+            <span class="status status-done">Done</span>
+            <h3>Listed on Disboard</h3>
+            <p>Community now discoverable publicly on Disboard.</p>
+        </div>
+    </div>
+
+    <div class="timeline-item reveal">
+        <div class="timeline-dot dot-active">🔄</div>
+        <div class="timeline-content">
+            <span class="status status-active">In Progress</span>
+            <h3>Grow to 50 Members</h3>
+            <p>Posting daily content and driving traffic to the Discord consistently.</p>
+        </div>
+    </div>
+
+    <div class="timeline-item reveal">
+        <div class="timeline-dot dot-soon">🔜</div>
+        <div class="timeline-content">
+            <span class="status status-soon">Coming Soon</span>
+            <h3>First Community Challenge</h3>
+            <p>A 7-day build challenge for members to create something real together.</p>
+        </div>
+    </div>
+
+    <div class="timeline-item reveal">
+        <div class="timeline-dot dot-soon">🔜</div>
+        <div class="timeline-content">
+            <span class="status status-soon">Coming Soon</span>
+            <h3>First Collab Project</h3>
+            <p>Members team up and ship a real project together as a community.</p>
+        </div>
+    </div>
+
+    <div class="timeline-item reveal">
+        <div class="timeline-dot dot-soon">🔜</div>
+        <div class="timeline-content">
+            <span class="status status-soon">Coming Soon</span>
+            <h3>100 Members Milestone</h3>
+            <p>The goal that proves this community is real and growing.</p>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    © <span id="year"></span> The Akin Project
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</div>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+function revealOnScroll(){
+    reveals.forEach((el)=>{
+        if(el.getBoundingClientRect().top < window.innerHeight - 100){
+            el.classList.add('active');
+        }
+    });
+}
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+</script>
+
+<script>
+const c = document.getElementById('bg');
+const ctx = c.getContext('2d');
+let W, H, pts;
+let mouse = { x: -9999, y: -9999 };
+function resize(){ W = c.width = innerWidth; H = c.height = innerHeight; }
+function init(){
+  resize();
+  pts = Array.from({length:80}, () => ({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    vx: (Math.random()-.5)*.4,
+    vy: (Math.random()-.5)*.4,
+    r: Math.random()*2+1
+  }));
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach(p => {
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>W) p.vx*=-1;
+    if(p.y<0||p.y>H) p.vy*=-1;
+  });
+  for(let i=0;i<pts.length;i++){
+    for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<130){
+        const mx=(pts[i].x+pts[j].x)/2, my=(pts[i].y+pts[j].y)/2;
+        const mdist=Math.sqrt((mouse.x-mx)**2+(mouse.y-my)**2);
+        const boost=mdist<200?(1-mdist/200)*0.4:0;
+        ctx.beginPath();
+        ctx.strokeStyle=`rgba(182,216,0,${(1-d/130)*0.15+boost})`;
+        ctx.lineWidth=mdist<200?1.5:1;
+        ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.stroke();
+      }
+    }
+  }
+  pts.forEach(p => {
+    const dx=mouse.x-p.x, dy=mouse.y-p.y, dist=Math.sqrt(dx*dx+dy*dy), near=dist<150;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,near?p.r*1.8:p.r,0,Math.PI*2);
+    ctx.fillStyle=near?'rgba(182,216,0,0.8)':'rgba(182,216,0,0.35)';
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+window.addEventListener('resize', resize);
+init();
+draw();
+if(window.innerWidth > 700){
+  document.addEventListener('mousemove', e => { mouse.x=e.clientX; mouse.y=e.clientY; });
+  document.addEventListener('mouseleave', () => { mouse.x=-9999; mouse.y=-9999; });
+}
+</script>
+
+</body>
+</html>
