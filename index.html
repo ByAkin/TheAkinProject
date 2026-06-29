@@ -4,13 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Akin Project</title>
-
 <style>
-
-    :root{
+:root{
     --accent:#B6D800;
+    --bg:#0a0a0a;
+    --card:#111;
+    --border:#222;
+    --text-muted:#999;
 }
-    
+
 *{
     margin:0;
     padding:0;
@@ -18,325 +20,554 @@
     font-family:Inter,system-ui,sans-serif;
 }
 
-html{
-    scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth;}
 
 body{
-    background:#0a0a0a;
+    background:var(--bg);
     color:white;
     line-height:1.6;
     overflow-x:hidden;
 }
 
-    .header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-}
-    header{
-    padding: 20px 5%;
-}
-    
-.container{
-    max-width:1100px;
-    margin:auto;
-    padding:110px 24px 0;
-}
-
+/* ── NAV ── */
 nav{
     position:fixed;
-    top:0;
-    left:0;
+    top:0;left:0;
     width:100%;
     z-index:1000;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
-
     padding:18px 40px;
-
-   background:rgba(10,10,10,0.12);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-
+    background:rgba(10,10,10,0.6);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
     border-bottom:1px solid rgba(255,255,255,0.06);
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+    transition:padding 0.3s ease;
 }
 
 .logo{
     font-size:1.3rem;
     font-weight:700;
     letter-spacing:1px;
-    color:#B6D800;
+    color:var(--accent);
+    transition:opacity 0.2s;
 }
+.logo:hover{opacity:0.8;}
 
 .links{
     display:flex;
     align-items:center;
-    gap:20px;
+    gap:24px;
 }
 
 .links a{
     color:#bbb;
     text-decoration:none;
-    transition:all 0.3s ease;
+    font-size:0.9rem;
+    transition:all 0.25s ease;
+    position:relative;
 }
 
-    .links a:hover{
-    color:#B6D800;
+.links a:not(.nav-discord)::after{
+    content:'';
+    position:absolute;
+    bottom:-2px;left:0;
+    width:0;height:1px;
+    background:var(--accent);
+    transition:width 0.25s ease;
+}
+
+.links a:not(.nav-discord):hover::after{width:100%;}
+.links a:hover{color:var(--accent);}
+
+.nav-discord{
+    padding:8px 16px;
+    border-radius:10px;
+    background:#5865F2;
+    color:white !important;
+    font-weight:600;
+    font-size:0.85rem;
+    text-decoration:none;
+    transition:all 0.25s ease;
+    box-shadow:0 4px 15px rgba(88,101,242,0.3);
+}
+.nav-discord:hover{
+    background:var(--accent);
+    color:black !important;
+    box-shadow:0 4px 20px rgba(182,216,0,0.3);
     transform:translateY(-1px);
 }
 
-    
-    body{
-    overflow-x:hidden;
+/* ── CONTAINER ── */
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:110px 24px 0;
+    position:relative;
+    z-index:1;
 }
-    
+
+/* ── HERO ── */
 .hero{
-    min-height:85vh;
+    min-height:90vh;
     display:flex;
     flex-direction:column;
     justify-content:center;
+    padding-bottom:60px;
+}
+
+.hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:6px 14px;
+    border:1px solid rgba(182,216,0,0.25);
+    border-radius:999px;
+    font-size:12px;
+    letter-spacing:1.5px;
+    color:var(--accent);
+    margin-bottom:28px;
+    width:fit-content;
+    background:rgba(182,216,0,0.05);
+}
+
+.hero-tag span{
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--accent);
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1);}
+    50%{opacity:0.4;transform:scale(0.8);}
 }
 
 .hero h1{
     font-size:clamp(3rem,8vw,6rem);
-    line-height:1;
-    margin-bottom:20px;
+    line-height:1.05;
+    margin-bottom:24px;
+    letter-spacing:-1px;
+}
+
+.hero h1 em{
+    font-style:normal;
+    color:var(--accent);
 }
 
 .hero p{
-    font-size:1.2rem;
+    font-size:1.15rem;
     color:#aaa;
-    max-width:700px;
+    max-width:600px;
+    line-height:1.7;
 }
 
 .btns{
     margin-top:40px;
     display:flex;
-    gap:16px;
+    gap:14px;
     flex-wrap:wrap;
 }
 
 .btn{
-    padding:14px 26px;
+    padding:14px 28px;
     border-radius:12px;
     text-decoration:none;
     font-weight:600;
-    transition:.3s;
+    font-size:0.95rem;
+    transition:all 0.25s ease;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
 }
 
 .primary{
-    background:#B6D800;
+    background:var(--accent);
     color:black;
+    box-shadow:0 8px 25px rgba(182,216,0,0.25);
 }
-
 .primary:hover{
     transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(182,216,0,0.35);
 }
 
-.secondary{
-    border:1px solid #333;
-    color:white;
+/* scroll indicator */
+.scroll-hint{
+    margin-top:70px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:8px;
+    opacity:0.4;
+    animation:float 3s ease-in-out infinite;
+}
+.scroll-hint span{
+    font-size:10px;
+    letter-spacing:3px;
+    color:#666;
+    text-transform:uppercase;
+}
+.scroll-line{
+    width:1px;
+    height:44px;
+    background:linear-gradient(to bottom, var(--accent), transparent);
+    margin-left:2px;
 }
 
-.secondary:hover{
-    border-color:#B6D800;
+@keyframes float{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(10px);}
 }
 
+/* ── SECTIONS ── */
 .section{
     padding:100px 0;
 }
 
 .section h2{
-    font-size:2.5rem;
-    margin-bottom:20px;
+    font-size:clamp(2rem,4vw,2.8rem);
+    margin-bottom:16px;
+    letter-spacing:-0.5px;
 }
 
-.section p{
-    color:#999;
-    max-width:700px;
+.section>p{
+    color:var(--text-muted);
+    max-width:620px;
+    font-size:1rem;
+    line-height:1.7;
 }
 
+/* ── CARDS ── */
 .cards{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+    gap:18px;
     margin-top:40px;
 }
 
 .card{
-    background:#111;
-    border:1px solid #222;
-    padding:24px;
-    border-radius:18px;
-    transition:.3s;
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:26px;
+    border-radius:20px;
+    transition:all 0.3s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.card::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;
+    height:1px;
+    background:linear-gradient(90deg, transparent, rgba(182,216,0,0.15), transparent);
+    opacity:0;
+    transition:opacity 0.3s;
 }
 
 .card:hover{
-    transform:translateY(-5px);
-    border-color:#B6D800;
+    transform:translateY(-6px);
+    border-color:rgba(182,216,0,0.3);
+    box-shadow:0 20px 40px rgba(0,0,0,0.3);
 }
+.card:hover::before{opacity:1;}
 
 .card h3{
     margin-bottom:10px;
+    font-size:1rem;
 }
 
-.card p{
-    color:#999;
-}
+.card p{color:var(--text-muted);font-size:0.9rem;line-height:1.6;}
 
+/* ── QUOTE ── */
 .quote{
     text-align:center;
     padding:120px 20px;
-    color:#B6D800;
 }
 
 .quote h2{
-    font-size:clamp(2rem,5vw,4rem);
-    max-width:850px;
+    font-size:clamp(2rem,5vw,3.8rem);
+    max-width:800px;
     margin:auto;
-    color:#B6D800;
-}
-
-footer{
-    border-top:1px solid #222;
-    padding:40px 0;
-    text-align:center;
-    color:#777;
-}
-
-    
-@media(max-width:700px){
-
-    nav{
-        flex-direction:column;
-        gap:15px;
-    }
-
-    .links{
-        text-align:center;
-    }
-
-    .links a{
-        margin:0 10px;
-    }
-
-    .hero{
-        min-height:75vh;
-    }
-
-    .section{
-        padding:70px 0;
-    }
-}
-.discord{
-    background:#5865F2;
     color:white;
-    transition:all 0.3s ease;
+    letter-spacing:-0.5px;
+    line-height:1.15;
 }
 
-.discord:hover{
-    background:#B6D800;
-    color:black;
-    transform:translateY(-2px);
-    box-shadow:0 10px 25px rgba(182,216,0,0.2);
-}
+.quote-accent h2{color:var(--accent);}
 
-    .nav-discord{
-    padding:8px 14px;
-    border-radius:10px;
-    background:#5865F2;
-    color:white !important;
-    font-weight:600;
-    text-decoration:none;
-    transition:all 0.3s ease;
-}
-
-.nav-discord:hover{
-    background:#B6D800;
-    color:black !important;
-    transform:translateY(-2px);
-}
-    .quote-white h2{
-    color:white;
-}
-
-    .status-section{
+/* ── STATUS ── */
+.status-section{
     width:88%;
     max-width:1000px;
-    margin:100px auto;
+    margin:0 auto 100px;
     text-align:center;
 }
 
 .status-tag{
     display:inline-block;
-    padding:8px 14px;
-    border:1px solid rgba(255,255,255,0.15);
+    padding:7px 14px;
+    border:1px solid rgba(255,255,255,0.12);
     border-radius:999px;
-    font-size:12px;
-    letter-spacing:1px;
-    color:#B6D800;
+    font-size:11px;
+    letter-spacing:1.5px;
+    color:var(--accent);
     margin-bottom:18px;
+    text-transform:uppercase;
 }
 
 .status-section h2{
     font-size:clamp(2rem,5vw,3rem);
     margin-bottom:40px;
     color:white;
+    letter-spacing:-0.5px;
 }
 
 .status-grid{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:20px;
+    gap:18px;
 }
 
 .status-card{
     background:rgba(255,255,255,0.03);
     backdrop-filter:blur(12px);
-
-    border:1px solid rgba(255,255,255,0.25);
-    box-shadow:0 0 20px rgba(182,216,0,0.05);
-
-    border-radius:20px;
-    padding:30px 20px;
-
-     transition:
-        transform 0.35s ease,
-        border-color 0.35s ease,
-        box-shadow 0.35s ease;
-    
+    border:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 0 30px rgba(182,216,0,0.04);
+    border-radius:22px;
+    padding:32px 20px;
+    transition:all 0.35s ease;
 }
 
 .status-card:hover{
     transform:translateY(-5px);
-    border-color:#B6D800;
+    border-color:rgba(182,216,0,0.3);
+    box-shadow:0 20px 40px rgba(0,0,0,0.2);
 }
 
 .status-card h3{
-    color:#888;
-    font-size:14px;
-    margin-bottom:12px;
+    color:#666;
+    font-size:11px;
+    margin-bottom:14px;
     text-transform:uppercase;
-    letter-spacing:1px;
+    letter-spacing:1.5px;
 }
 
 .status-card p{
-    font-size:2rem;
+    font-size:2.2rem;
     font-weight:700;
     color:white;
+    line-height:1;
 }
 
-    .reveal{
+/* ── HEATMAP ── */
+.heatmap{
+    display:grid;
+    grid-template-columns:repeat(7,12px);
+    gap:5px;
+    justify-content:center;
+    margin-top:20px;
+}
+
+.cell{
+    width:12px;height:12px;
+    border-radius:3px;
+    background:rgba(255,255,255,0.06);
+    transition:all 0.2s;
+}
+
+.cell.active{
+    background:var(--accent);
+    box-shadow:0 0 8px rgba(182,216,0,0.5);
+}
+
+/* ── AI SECTION ── */
+.ai-section{
+    width:88%;
+    max-width:1000px;
+    margin:0 auto 100px;
+    text-align:center;
+}
+
+.ai-section h2{
+    font-size:clamp(2rem,5vw,3rem);
+    margin-bottom:10px;
+    color:white;
+    letter-spacing:-0.5px;
+}
+
+.ai-section>p{
+    color:#888;
+    margin-bottom:36px;
+    font-size:0.95rem;
+}
+
+.ai-tabs{
+    display:flex;
+    gap:10px;
+    margin-bottom:28px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+
+.ai-tab{
+    padding:10px 22px;
+    border-radius:10px;
+    border:1px solid #222;
+    background:transparent;
+    color:#888;
+    cursor:pointer;
+    font-size:0.85rem;
+    font-weight:600;
+    transition:all 0.25s ease;
+    font-family:Inter,system-ui,sans-serif;
+}
+
+.ai-tab.active{background:var(--accent);color:#000;border-color:var(--accent);}
+.ai-tab:hover:not(.active){border-color:var(--accent);color:var(--accent);}
+
+.ai-panel{display:none;text-align:left;animation:fadeUp 0.3s ease;}
+.ai-panel.active{display:block;}
+
+@keyframes fadeUp{
+    from{opacity:0;transform:translateY(10px);}
+    to{opacity:1;transform:translateY(0);}
+}
+
+.ai-input-box{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:24px;
+    margin-bottom:16px;
+}
+
+.ai-input-box label{
+    font-size:11px;
+    color:#666;
+    display:block;
+    margin-bottom:8px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.ai-input-box input,
+.ai-input-box textarea,
+.ai-input-box select{
+    width:100%;
+    background:#0a0a0a;
+    border:1px solid #2a2a2a;
+    border-radius:10px;
+    padding:11px 14px;
+    color:white;
+    font-size:0.9rem;
+    font-family:Inter,system-ui,sans-serif;
+    outline:none;
+    transition:border-color 0.2s ease;
+    resize:vertical;
+}
+
+.ai-input-box input:focus,
+.ai-input-box textarea:focus,
+.ai-input-box select:focus{border-color:var(--accent);}
+
+.ai-input-box select option{background:#111;}
+
+.ai-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:14px;
+}
+
+.ai-field{margin-bottom:14px;}
+
+.ai-run-btn{
+    background:var(--accent);
+    color:#000;
+    border:none;
+    padding:12px 28px;
+    border-radius:10px;
+    font-weight:700;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:all 0.25s ease;
+    font-family:Inter,system-ui,sans-serif;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:4px;
+}
+
+.ai-run-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(182,216,0,0.25);}
+.ai-run-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+.ai-output{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:24px;
+    min-height:130px;
+}
+
+.ai-output-label{
+    font-size:11px;
+    letter-spacing:1.5px;
+    color:var(--accent);
+    margin-bottom:12px;
+    text-transform:uppercase;
+}
+
+.ai-output-text{
+    color:#ccc;
+    font-size:0.9rem;
+    line-height:1.8;
+    white-space:pre-wrap;
+}
+
+.ai-placeholder{color:#444;font-style:italic;}
+
+.ai-copy-btn{
+    background:transparent;
+    border:1px solid #2a2a2a;
+    color:#666;
+    padding:6px 14px;
+    border-radius:8px;
+    font-size:12px;
+    cursor:pointer;
+    margin-top:14px;
+    font-family:Inter,system-ui,sans-serif;
+    transition:all 0.2s ease;
+}
+
+.ai-copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+
+.ai-spinner{
+    width:15px;height:15px;
+    border:2px solid rgba(0,0,0,0.2);
+    border-top-color:#000;
+    border-radius:50%;
+    animation:spin 0.7s linear infinite;
+}
+
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── FOOTER ── */
+footer{
+    border-top:1px solid #1a1a1a;
+    padding:40px 0;
+    text-align:center;
+    color:#444;
+    font-size:0.85rem;
+}
+
+/* ── REVEAL ── */
+.reveal{
     opacity:0;
-    transform:translateY(30px);
-    transition:all 0.8s ease;
+    transform:translateY(28px);
+    transition:opacity 0.7s ease, transform 0.7s ease;
 }
 
 .reveal.active{
@@ -344,211 +575,144 @@ footer{
     transform:translateY(0);
 }
 
-    .heatmap{
-    display:grid;
-    grid-template-columns:repeat(7,12px);
-    gap:6px;
-    justify-content:center;
-    margin:15px 0;
-    margin-top:25px
+/* ── MOBILE ── */
+@media(max-width:700px){
+    nav{
+        flex-direction:row;
+        padding:14px 20px;
+        gap:0;
+    }
+
+    .links{gap:12px;}
+
+    .links a{
+        font-size:0.8rem;
+        margin:0;
+    }
+
+    .nav-discord{
+        padding:7px 12px;
+        font-size:0.8rem;
+    }
+
+    .hero{
+        min-height:80vh;
+        padding-bottom:40px;
+    }
+
+    .btns{width:100%;}
+
+    .btn{
+        width:100%;
+        justify-content:center;
+        text-align:center;
+    }
+
+    .section{padding:70px 0;}
+
+    .scroll-hint{display:none;}
+
+    .ai-row{grid-template-columns:1fr;}
+
+    .status-grid{grid-template-columns:1fr 1fr;}
 }
 
-.cell{
-    width:12px;
-    height:12px;
-    border-radius:3px;
-    background:rgba(255,255,255,0.08);
+@media(max-width:400px){
+    .status-grid{grid-template-columns:1fr;}
 }
-
-.cell.active{
-    background:var(--accent);
-    box-shadow:0 0 10px var(--accent);
-}
-
-    .container { position: relative; z-index: 1; }
-
-    /* AI TOOLS SECTION */
-.ai-section{width:88%;max-width:1000px;margin:0 auto 100px;text-align:center;}
-.ai-section h2{font-size:clamp(2rem,5vw,3rem);margin-bottom:10px;color:white;}
-.ai-section>p{color:#888;margin-bottom:36px;font-size:0.95rem;}
-.ai-tabs{display:flex;gap:10px;margin-bottom:28px;flex-wrap:wrap;justify-content:center;}
-.ai-tab{padding:10px 22px;border-radius:10px;border:1px solid #222;background:transparent;color:#888;cursor:pointer;font-size:0.9rem;font-weight:600;transition:all 0.25s;font-family:Inter,system-ui,sans-serif;}
-.ai-tab.active{background:#B6D800;color:#000;border-color:#B6D800;}
-.ai-tab:hover:not(.active){border-color:#B6D800;color:#B6D800;}
-.ai-panel{display:none;text-align:left;}
-.ai-panel.active{display:block;}
-.ai-input-box{background:#111;border:1px solid #222;border-radius:16px;padding:22px;margin-bottom:16px;}
-.ai-input-box label{font-size:11px;color:#888;display:block;margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;}
-.ai-input-box input,.ai-input-box textarea,.ai-input-box select{width:100%;background:#0a0a0a;border:1px solid #333;border-radius:8px;padding:10px 14px;color:white;font-size:0.9rem;font-family:Inter,system-ui,sans-serif;outline:none;transition:border-color 0.2s;resize:vertical;}
-.ai-input-box input:focus,.ai-input-box textarea:focus,.ai-input-box select:focus{border-color:#B6D800;}
-.ai-input-box select option{background:#111;}
-.ai-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-@media(max-width:560px){.ai-row{grid-template-columns:1fr;}}
-.ai-field{margin-bottom:14px;}
-.ai-run-btn{background:#B6D800;color:#000;border:none;padding:12px 28px;border-radius:10px;font-weight:700;font-size:0.95rem;cursor:pointer;transition:all 0.2s;font-family:Inter,system-ui,sans-serif;display:flex;align-items:center;gap:8px;margin-top:4px;}
-.ai-run-btn:hover{transform:translateY(-2px);opacity:0.9;}
-.ai-run-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
-.ai-output{background:#111;border:1px solid #222;border-radius:16px;padding:22px;min-height:130px;}
-.ai-output-label{font-size:11px;letter-spacing:1px;color:#B6D800;margin-bottom:12px;text-transform:uppercase;}
-.ai-output-text{color:#ccc;font-size:0.9rem;line-height:1.8;white-space:pre-wrap;}
-.ai-placeholder{color:#444;font-style:italic;}
-.ai-copy-btn{background:transparent;border:1px solid #333;color:#888;padding:6px 14px;border-radius:7px;font-size:12px;cursor:pointer;margin-top:12px;font-family:Inter,system-ui,sans-serif;transition:all 0.2s;}
-.ai-copy-btn:hover{border-color:#B6D800;color:#B6D800;}
-.ai-spinner{width:16px;height:16px;border:2px solid #0004;border-top-color:#000;border-radius:50%;animation:ai-spin 0.7s linear infinite;}
-@keyframes ai-spin{to{transform:rotate(360deg);}}
-    
 </style>
 </head>
 
 <body>
 
-    
 <canvas id="bg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
-    
+
 <div class="container">
 
 <nav>
-<div class="logo">AKIN</div>
-
-<div class="links">
-<a href="/TheAkinProject/News.html">News</a>
-<a href="https://www.youtube.com/@The_Akin_Project">YouTube</a>
-<a href="https://discord.gg/kYnNsAgM" class="nav-discord">Discord</a>
-</div>
+    <div class="logo">AKIN</div>
+    <div class="links">
+        <a href="/TheAkinProject/News.html">News</a>
+        <a href="https://www.youtube.com/@The_Akin_Project">YouTube</a>
+        <a href="https://discord.gg/kYnNsAgM" class="nav-discord">Discord</a>
+    </div>
 </nav>
 
 <section class="hero reveal">
-<h1>Stop Figuring It Out Alone.</h1>
-
-<p>
-The Akin Project is a community for ambitious beginners to learn, build, and grow together.
-Find like-minded people, start real projects, and take your first step with others who are on the same journey.
-</p>
-
-<div class="btns">
-
-    <a href="https://discord.gg/kYnNsAgM"
-   target="_blank"
-   rel="noopener noreferrer"
-   class="btn discord">
-   💬 Join The Community
-</a>
-    
-</div>
+    <div class="hero-tag"><span></span> Community is live</div>
+    <h1>Stop Figuring It Out <em>Alone.</em></h1>
+    <p>The Akin Project is a community for ambitious beginners to learn, build, and grow together. Find like-minded people, start real projects, and take your first step with others who are on the same journey.</p>
+    <div class="btns">
+        <a href="https://discord.gg/kYnNsAgM" target="_blank" rel="noopener noreferrer" class="btn primary">💬 Join The Community</a>
+    </div>
+    <div class="scroll-hint">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
 </section>
 
 <section class="section reveal">
-<h2>Why Join Us.</h2>
-
-<div class="cards">
-
-<div class="card">
-<h3>🤝 Find Your People</h3>
-<p>Meet ambitious beginners like you.</p>
-</div>
-
-<div class="card">
-<h3>🛠 Build Together</h3>
-<p>Turn ideas into real projects.</p>
-</div>
-
-<div class="card">
-<h3>📈 Grow Consistently</h3>
-<p>Learn by doing, one step at a time.</p>
-</div>
-
-</div>
+    <h2>Why Join Us.</h2>
+    <div class="cards">
+        <div class="card"><h3>🤝 Find Your People</h3><p>Meet ambitious beginners like you.</p></div>
+        <div class="card"><h3>🛠 Build Together</h3><p>Turn ideas into real projects.</p></div>
+        <div class="card"><h3>📈 Grow Consistently</h3><p>Learn by doing, one step at a time.</p></div>
+    </div>
 </section>
 
 <section class="section reveal">
-<h2>How It Works</h2>
-
-<p>
-Whether you're exploring AI, coding, startups, design, or any other skill,
-we help you learn by doing, build real projects, and connect with people who are growing alongside you.
-</p>
-
-<div class="cards">
-
-
-<div class="card">
-<h3>🚀 Build</h3>
-<p>Turn ideas into real projects and gain experience by creating, not just consuming.</p>
-</div>
-
-<div class="card">
-<h3>💬 Share Progress</h3>
-<p>Document your journey, celebrate wins, and learn from challenges together.</p>
-</div>
-
-
-<div class="card">
-<h3>🎯 Challenges</h3>
-<p>Join community challenges that push you to learn, build, and stay consistent.</p>
-</div>
-    
-</div>
+    <h2>How It Works</h2>
+    <p>Whether you're exploring AI, coding, startups, design, or any other skill, we help you learn by doing, build real projects, and connect with people who are growing alongside you.</p>
+    <div class="cards">
+        <div class="card"><h3>🚀 Build</h3><p>Turn ideas into real projects and gain experience by creating, not just consuming.</p></div>
+        <div class="card"><h3>💬 Share Progress</h3><p>Document your journey, celebrate wins, and learn from challenges together.</p></div>
+        <div class="card"><h3>🎯 Challenges</h3><p>Join community challenges that push you to learn, build, and stay consistent.</p></div>
+    </div>
 </section>
 
 <section class="section reveal">
-<h2>Who Is This For?</h2>
-
-<p>
-If you've ever thought, "I want to build something, but I don't know where to start," you're in the right place.
-The Akin Project is for curious students and ambitious beginners looking to learn, create, and grow with like-minded people.
-</p>
+    <h2>Who Is This For?</h2>
+    <p>If you've ever thought, "I want to build something, but I don't know where to start," you're in the right place. The Akin Project is for curious students and ambitious beginners looking to learn, create, and grow with like-minded people.</p>
 </section>
 
-<section class="quote quote-white reveal">
-<h2>
-Every expert was once a beginner.
-</h2>
+<section class="quote quote-accent reveal">
+    <h2>Every expert was once a beginner.</h2>
 </section>
 
-    <section class="status-section reveal">
-    <span class="status-tag">LIVE STATUS</span>
-
+<section class="status-section reveal">
+    <span class="status-tag">Live Status</span>
     <h2>Community Progress</h2>
-
     <div class="status-grid">
-
         <div class="status-card">
             <h3>Day</h3>
-            <p id="community-day"></p>
+            <p id="community-day">—</p>
         </div>
-
         <div class="status-card">
             <h3>Members</h3>
             <p>6</p>
         </div>
-
         <div class="status-card">
             <h3>Projects</h3>
             <p>5</p>
         </div>
-<!-- here update this daily -->
-    <div class="status-card">
-    <h3>Consistency</h3>
-
-    <div class="heatmap">
-        <div class="cell active"></div>
-        <div class="cell active"></div>
-        <div class="cell active"></div>
-        <div class="cell active"></div>
-        <div class="cell active"></div>
-        <div class="cell active"></div>
-        <div class="cell active"></div>
-    </div>
-
-</div>
-
+        <div class="status-card">
+            <h3>Consistency</h3>
+            <div class="heatmap">
+                <div class="cell active"></div>
+                <div class="cell active"></div>
+                <div class="cell active"></div>
+                <div class="cell active"></div>
+                <div class="cell active"></div>
+                <div class="cell active"></div>
+                <div class="cell active"></div>
+            </div>
+        </div>
     </div>
 </section>
 
-     <!-- ── start AI TOOLS SECTION ── -->
-    
+<!-- AI TOOLS -->
 <section class="ai-section reveal">
-    <span class="status-tag">AI POWERED</span>
+    <span class="status-tag">AI Powered</span>
     <h2>Your AI Starter Kit</h2>
     <p>Three free tools to help you find your path, pick a project, and get moving.</p>
 
@@ -633,114 +797,103 @@ Every expert was once a beginner.
         </div>
     </div>
 </section>
-    <!-- ── END AI TOOLS SECTION ── -->
-    <section class="quote reveal">
-<h2>
-What Happens If We Don't Quit?
-</h2>
 
-<p style="max-width:650px;margin:20px auto;color:#aaa;">
-Join a community of ambitious beginners taking the first step together.
-</p>
-
-<a href="https://discord.gg/kYnNsAgM"
-   class="btn discord">
-   Join The Community
-</a>
-
+<section class="quote reveal">
+    <h2>What Happens If We Don't Quit?</h2>
+    <p style="max-width:580px;margin:20px auto;color:#666;font-size:1rem;">Join a community of ambitious beginners taking the first step together.</p>
+    <div class="btns" style="justify-content:center;margin-top:32px;">
+        <a href="https://discord.gg/kYnNsAgM" class="btn primary">💬 Join The Community</a>
+    </div>
 </section>
-    
-<footer reveal>
-© <span id="year"></span> The Akin Project
-</footer>
 
-<script>
-document.getElementById("year").textContent = new Date().getFullYear();
-</script>
+<footer>
+    © <span id="year"></span> The Akin Project
+</footer>
 
 </div>
 
-    <script>
-const reveals = document.querySelectorAll('.reveal');
+<!-- SCRIPTS -->
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
 
-function revealOnScroll(){
-    reveals.forEach((element)=>{
-        const windowHeight = window.innerHeight;
-        const elementTop = element.getBoundingClientRect().top;
-
-        if(elementTop < windowHeight - 100){
-            element.classList.add('active');
-        }
-    });
-}
-
-window.addEventListener('scroll', revealOnScroll);
-revealOnScroll();
-
-        const startDate = new Date('2026-06-23'); // the day you launched
+// Day counter
+const startDate = new Date('2026-06-23');
 const today = new Date();
 const day = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
 document.getElementById('community-day').textContent = day;
 </script>
 
+<script>
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+function revealOnScroll(){
+    reveals.forEach(el => {
+        if(el.getBoundingClientRect().top < window.innerHeight - 80){
+            el.classList.add('active');
+        }
+    });
+}
+window.addEventListener('scroll', revealOnScroll, {passive:true});
+revealOnScroll();
+</script>
 
 <script>
+// Particle background
 const c = document.getElementById('bg');
 const ctx = c.getContext('2d');
 let W, H, pts;
-let mouse = { x: -9999, y: -9999 };
-function resize(){ W = c.width = innerWidth; H = c.height = innerHeight; }
+let mouse = {x:-9999,y:-9999};
+
+function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
 function init(){
-  resize();
-  pts = Array.from({length:80}, () => ({
-    x: Math.random()*W,
-    y: Math.random()*H,
-    vx: (Math.random()-.5)*.4,
-    vy: (Math.random()-.5)*.4,
-    r: Math.random()*2+1
-  }));
+    resize();
+    pts = Array.from({length:80},()=>({
+        x:Math.random()*W,
+        y:Math.random()*H,
+        vx:(Math.random()-.5)*.4,
+        vy:(Math.random()-.5)*.4,
+        r:Math.random()*2+1
+    }));
 }
 function draw(){
-  ctx.clearRect(0,0,W,H);
-  pts.forEach(p => {
-    p.x+=p.vx; p.y+=p.vy;
-    if(p.x<0||p.x>W) p.vx*=-1;
-    if(p.y<0||p.y>H) p.vy*=-1;
-  });
-  for(let i=0;i<pts.length;i++){
-    for(let j=i+1;j<pts.length;j++){
-      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.sqrt(dx*dx+dy*dy);
-      if(d<130){
-        const mx=(pts[i].x+pts[j].x)/2, my=(pts[i].y+pts[j].y)/2;
-        const mdist=Math.sqrt((mouse.x-mx)**2+(mouse.y-my)**2);
-        const boost=mdist<200?(1-mdist/200)*0.4:0;
-        ctx.beginPath();
-        ctx.strokeStyle=`rgba(182,216,0,${(1-d/130)*0.15+boost})`;
-        ctx.lineWidth=mdist<200?1.5:1;
-        ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.stroke();
-      }
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0||p.x>W)p.vx*=-1;
+        if(p.y<0||p.y>H)p.vy*=-1;
+    });
+    for(let i=0;i<pts.length;i++){
+        for(let j=i+1;j<pts.length;j++){
+            const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+            if(d<130){
+                const mx=(pts[i].x+pts[j].x)/2,my=(pts[i].y+pts[j].y)/2;
+                const mdist=Math.sqrt((mouse.x-mx)**2+(mouse.y-my)**2);
+                const boost=mdist<200?(1-mdist/200)*0.4:0;
+                ctx.beginPath();
+                ctx.strokeStyle=`rgba(182,216,0,${(1-d/130)*0.15+boost})`;
+                ctx.lineWidth=mdist<200?1.5:1;
+                ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke();
+            }
+        }
     }
-  }
-  pts.forEach(p => {
-    const dx=mouse.x-p.x, dy=mouse.y-p.y, dist=Math.sqrt(dx*dx+dy*dy), near=dist<150;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,near?p.r*1.8:p.r,0,Math.PI*2);
-    ctx.fillStyle=near?'rgba(182,216,0,0.8)':'rgba(182,216,0,0.35)';
-    ctx.fill();
-  });
-  requestAnimationFrame(draw);
+    pts.forEach(p=>{
+        const dx=mouse.x-p.x,dy=mouse.y-p.y,dist=Math.sqrt(dx*dx+dy*dy),near=dist<150;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,near?p.r*1.8:p.r,0,Math.PI*2);
+        ctx.fillStyle=near?'rgba(182,216,0,0.8)':'rgba(182,216,0,0.35)';
+        ctx.fill();
+    });
+    requestAnimationFrame(draw);
 }
-window.addEventListener('resize', resize);
-init();
-draw();
-if(window.innerWidth > 700){
-  document.addEventListener('mousemove', e => { mouse.x=e.clientX; mouse.y=e.clientY; });
-  document.addEventListener('mouseleave', () => { mouse.x=-9999; mouse.y=-9999; });
+window.addEventListener('resize',resize,{passive:true});
+init();draw();
+if(window.innerWidth>700){
+    document.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;});
+    document.addEventListener('mouseleave',()=>{mouse.x=-9999;mouse.y=-9999;});
 }
 </script>
 
-    <script>
-// ⚠️ Replace this URL with your actual Vercel URL after deploying
+<script>
 const VERCEL_URL = 'https://akin-api.vercel.app';
 
 function aiTab(name,btn){
@@ -779,7 +932,7 @@ async function aiRunChat(){
     const q=document.getElementById('ai-chat-q').value.trim();
     if(!q)return;
     aiSetLoading('ai-chat-btn',true,'Ask');
-    const sys = 'You are the AI assistant for The Akin Project. Here are the facts — only use these, never make anything up: The Akin Project is a community for ambitious beginners to learn, build, and grow together. It was started by Akin. The only way to join is via Discord at https://discord.gg/kYnNsAgM. There is no website account, no sign-up form, no onboarding process, no community forums, no paid plans. The community is on Discord only. The community is new and growing — currently has 6 members. Members build real projects, share progress, join challenges, and learn by doing. It is free to join. The community welcomes anyone curious about coding, AI, design, startups, content creation, or any skill. If asked how to join, always give the Discord link. If you do not know something, say you do not know — never make anything up. Only answer questions related to The Akin Project, learning, building, or personal growth. Decline anything inappropriate or off-topic. Be warm, direct, and encouraging. No markdown formatting.';
+    const sys='You are the AI assistant for The Akin Project. Here are the facts — only use these, never make anything up: The Akin Project is a community for ambitious beginners to learn, build, and grow together. It was started by Akin. The only way to join is via Discord at https://discord.gg/kYnNsAgM. There is no website account, no sign-up form, no onboarding process, no community forums, no paid plans. The community is on Discord only. The community is new and growing — currently has 6 members. Members build real projects, share progress, join challenges, and learn by doing. It is free to join. The community welcomes anyone curious about coding, AI, design, startups, content creation, or any skill. If asked how to join, always give the Discord link. If you do not know something, say you do not know — never make anything up. Only answer questions related to The Akin Project, learning, building, or personal growth. Decline anything inappropriate or off-topic. Be warm, direct, and encouraging. No markdown formatting.';
     aiSetOutput('ai-chat-out','Answer',await aiCall(sys,q));
     aiSetLoading('ai-chat-btn',false,'Ask');
 }
@@ -788,7 +941,7 @@ async function aiRunProject(){
     const level=document.getElementById('ai-proj-level').value;
     const goal=document.getElementById('ai-proj-goal').value.trim();
     aiSetLoading('ai-proj-btn',true,'Generate Ideas');
-    const sys = 'You are a project idea generator for beginner learners. Give exactly 3 beginner-friendly project ideas based on the user input. For each: punchy name, what it is, what they learn, why it matters. Only generate ideas related to learning, building, and creating. Refuse any inappropriate or harmful requests. Plain text only, no markdown.';
+    const sys='You are a project idea generator for beginner learners. Give exactly 3 beginner-friendly project ideas based on the user input. For each: punchy name, what it is, what they learn, why it matters. Only generate ideas related to learning, building, and creating. Refuse any inappropriate or harmful requests. Plain text only, no markdown.';
     aiSetOutput('ai-proj-out','Project Ideas',await aiCall(sys,`Skill: ${skill}\nLevel: ${level}\nGoal: ${goal||'learn and build'}`));
     aiSetLoading('ai-proj-btn',false,'Generate Ideas');
 }
@@ -797,11 +950,11 @@ async function aiRunRoadmap(){
     const time=document.getElementById('ai-road-time').value;
     const level=document.getElementById('ai-road-level').value;
     aiSetLoading('ai-road-btn',true,'Build My Roadmap');
-    const sys = 'You are a learning roadmap builder for beginners. Create a clear 4-week learning roadmap based on the user input. Each week: what to learn, one free resource, what to build. Only respond to legitimate learning topics. Refuse anything inappropriate or harmful. Plain text only, no markdown.';
+    const sys='You are a learning roadmap builder for beginners. Create a clear 4-week learning roadmap based on the user input. Each week: what to learn, one free resource, what to build. Only respond to legitimate learning topics. Refuse anything inappropriate or harmful. Plain text only, no markdown.';
     aiSetOutput('ai-road-out','Your Roadmap',await aiCall(sys,`Topic: ${topic}\nTime/week: ${time}\nLevel: ${level}`));
     aiSetLoading('ai-road-btn',false,'Build My Roadmap');
 }
 </script>
-    
+
 </body>
 </html>
