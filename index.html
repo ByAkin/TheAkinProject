@@ -847,13 +847,14 @@ let mouse = {x:-9999,y:-9999};
 function resize(){W=c.width=innerWidth;H=c.height=innerHeight;}
 function init(){
     resize();
-    pts = Array.from({length:80},()=>({
-        x:Math.random()*W,
-        y:Math.random()*H,
-        vx:(Math.random()-.5)*.4,
-        vy:(Math.random()-.5)*.4,
-        r:Math.random()*2+1
-    }));
+   const isMobile = W < 700;
+pts = Array.from({length: isMobile ? 50 : 80},()=>({
+    x:Math.random()*W,
+    y:Math.random()*H,
+    vx:(Math.random()-.5)*.4,
+    vy:(Math.random()-.5)*.4,
+    r: isMobile ? Math.random()*1+0.5 : Math.random()*2+1
+}));
 }
 function draw(){
     ctx.clearRect(0,0,W,H);
