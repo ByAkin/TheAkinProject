@@ -4,475 +4,158 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>News</title>
-
 <style>
-:root{
-    --accent:#B6D800;
-}
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Inter,system-ui,sans-serif;
-}
-
-html{scroll-behavior:smooth;}
-
-body{
-    background:#0a0a0a;
-    color:white;
-    line-height:1.6;
-    overflow-x:hidden;
-}
-
-/* ── NAV ── */
-nav{
-    position:fixed;
-    top:0;left:0;
-    width:100%;
-    z-index:1000;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:18px 40px;
-    background:rgba(10,10,10,0.6);
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
-    border-bottom:1px solid rgba(255,255,255,0.06);
-    box-shadow:0 10px 40px rgba(0,0,0,0.4);
-}
-
-.logo{
-    font-size:1.3rem;
-    font-weight:700;
-    letter-spacing:1px;
-    color:var(--accent);
-    transition:opacity 0.2s;
-}
-.logo:hover{opacity:0.8;}
-
-.links{
-    display:flex;
-    align-items:center;
-    gap:24px;
-}
-
-.links a{
-    color:#bbb;
-    text-decoration:none;
-    font-size:0.9rem;
-    transition:all 0.25s ease;
-    position:relative;
-}
-
-.links a:not(.nav-discord)::after{
-    content:'';
-    position:absolute;
-    bottom:-2px;left:0;
-    width:0;height:1px;
-    background:var(--accent);
-    transition:width 0.25s ease;
-}
-.links a:not(.nav-discord):hover::after{width:100%;}
-.links a:hover{color:var(--accent);}
-
-.nav-discord{
-    padding:8px 16px;
-    border-radius:10px;
-    background:#5865F2;
-    color:white !important;
-    font-weight:600;
-    font-size:0.85rem;
-    text-decoration:none;
-    transition:all 0.25s ease;
-    box-shadow:0 4px 15px rgba(88,101,242,0.3);
-}
-.nav-discord:hover{
-    background:var(--accent);
-    color:black !important;
-    box-shadow:0 4px 20px rgba(182,216,0,0.3);
-    transform:translateY(-1px);
-}
-
-/* ── HEADER ── */
-header{
-    padding:150px 5% 50px;
-    text-align:center;
-    position:relative;
-    z-index:1;
-}
-
-header h1{
-    font-size:clamp(2.4rem,7vw,4rem);
-    letter-spacing:-1px;
-    margin-bottom:14px;
-    background:linear-gradient(180deg,#fff,#aaa);
-    -webkit-background-clip:text;
-    background-clip:text;
-    color:transparent;
-}
-
-header p{
-    color:#888;
-    font-size:1rem;
-    max-width:520px;
-    margin:0 auto;
-}
-
-/* ── CONTAINER ── */
-.container{
-    width:90%;
-    max-width:1100px;
-    margin:30px auto 0;
-    position:relative;
-    z-index:1;
-}
-
-.section-title{
-    font-size:1.6rem;
-    margin-bottom:25px;
-    letter-spacing:-0.5px;
-}
-
-/* ── FEATURED ── */
-.featured-idea{
-    background:
-        linear-gradient(135deg, rgba(182,216,0,0.1), rgba(182,216,0,0.02)),
-        rgba(10,10,10,0.92);
-    border:1px solid rgba(182,216,0,0.18);
-    border-radius:22px;
-    padding:36px;
-    margin-bottom:50px;
-    transition:border-color 0.3s ease;
-}
-.featured-idea:hover{border-color:rgba(182,216,0,0.3);}
-
-.featured-tag{
-    color:var(--accent);
-    font-size:0.78rem;
-    letter-spacing:2px;
-    font-weight:700;
-}
-
-.featured-idea h2{
-    margin:14px 0;
-    font-size:clamp(1.5rem,3.5vw,2rem);
-    letter-spacing:-0.5px;
-}
-
-.featured-idea p{
-    color:#aaa;
-    line-height:1.8;
-    font-size:0.95rem;
-}
-
-.insight{
-    margin-top:22px;
-    padding:16px 18px;
-    border-left:3px solid var(--accent);
-    background:rgba(255,255,255,0.02);
-    border-radius:0 12px 12px 0;
-    color:#999;
-    font-size:0.9rem;
-    line-height:1.7;
-}
-
-/* ── NEWS GRID ── */
-.news-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
-    gap:18px;
-}
-
-.card{
-    background:#111;
-    border:1px solid #1f1f1f;
-    border-radius:18px;
-    padding:26px;
-    transition:all 0.3s ease;
-}
-
-.card:hover{
-    transform:translateY(-5px);
-    border-color:rgba(182,216,0,0.3);
-    box-shadow:0 16px 35px rgba(0,0,0,0.3);
-}
-
-.tag{
-    color:var(--accent);
-    font-size:0.78rem;
-    letter-spacing:1px;
-    margin-bottom:10px;
-    display:block;
-    text-transform:uppercase;
-}
-
-.card h3{
-    margin-bottom:12px;
-    font-size:1.05rem;
-    letter-spacing:-0.2px;
-}
-
-.card p{
-    color:#999;
-    line-height:1.65;
-    font-size:0.88rem;
-}
-
-footer{
-    text-align:center;
-    padding:40px 0;
-    color:#444;
-    font-size:0.85rem;
-    border-top:1px solid #1a1a1a;
-    margin-top:60px;
-}
-
-/* ── REVEAL ── */
-.reveal{
-    opacity:0;
-    transform:translateY(24px);
-    transition:opacity 0.6s ease, transform 0.6s ease;
-}
-.reveal.active{
-    opacity:1;
-    transform:translateY(0);
-}
-
-/* ── MOBILE ── */
-@media(max-width:700px){
-    nav{
-        padding:14px 20px;
-    }
-    .links{gap:12px;}
-    .links a{font-size:0.8rem;}
-    .nav-discord{padding:7px 12px;font-size:0.8rem;}
-
-    header{padding:120px 6% 40px;}
-
-    .featured-idea{padding:26px;}
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+body{background:#0a0a0a;color:white;padding-top:120px;}
+header{padding:60px 5% 20px;text-align:center;}
+header h1{font-size:3rem;margin-bottom:10px;}
+.news-section h2{width:100%;text-align:center;margin-top: 40px;}
+.header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+header{padding: 20px 5%;}
+header h1{font-size:3rem;margin-bottom:10px;}
+header p{color:#aaa;}
+.container{width:90%;max-width:1100px;margin:50px auto;}
+.section-title{font-size:1.8rem;margin-bottom:25px;}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+.card{background:#111;border:1px solid #222;border-radius:16px;padding:25px;transition:.3s;}
+.card:hover{transform:translateY(-5px);border-color:#B6D800;}
+.tag{color:#B6D800;font-size:.85rem;margin-bottom:10px;display:block;}
+.card h3{margin-bottom:12px;}
+.card p{color:#aaa;line-height:1.6;}
+footer{text-align:center;padding:50px;color:#666;}
+nav{position:fixed;top:0;left:0;width:100%;z-index:1000;display:flex;justify-content:space-between;align-items:center;padding:18px 40px;background:rgba(10,10,10,0.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.06);box-shadow: 0 10px 30px rgba(0,0,0,0.3);}
+.logo{font-size:1.3rem;font-weight:700;letter-spacing:1px;color:#B6D800;}
+.links{display:flex;align-items:center;gap:20px;}
+.links a{color:#bbb;text-decoration:none;transition:all .3s ease;}
+.links a:hover{color:#B6D800;}
+.nav-discord{padding:8px 14px;border-radius:10px;background:#5865F2;color:white !important;font-weight:600;}
+.nav-discord:hover{background:#B6D800;color:black !important;}
+.featured-idea{background:linear-gradient(135deg,rgba(182,216,0,0.12),rgba(182,216,0,0.03));border:1px solid rgba(182,216,0,0.2);border-radius:20px;padding:35px;margin-bottom:50px;}
+.featured-tag{color:#B6D800;font-size:.8rem;letter-spacing:2px;font-weight:700;}
+.featured-idea h2{margin:15px 0;font-size:2rem;}
+.featured-idea p{color:#bbb;line-height:1.8;}
+.insight{margin-top:20px;padding:15px;border-left:3px solid #B6D800;background:#111;color:#aaa;}
+@media(max-width:700px){nav{flex-direction:column;gap:15px;}.links{text-align:center;}.links a{margin:0 10px;}.hero{min-height:75vh;}.section{padding:70px 0;}}
 </style>
 </head>
 <body>
-
 <canvas id="bg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
-
 <nav>
 <div class="logo">AKIN</div>
 <div class="links">
 <a href="https://byakin.github.io/TheAkinProject/">Home</a>
 <a href="https://www.youtube.com/@The_Akin_Project">YouTube</a>
+<a href="https://www.linkedin.com/in/akin-founder">LinkedIn</a>
 <a href="https://discord.gg/kYnNsAgM" class="nav-discord">Discord</a>
 </div>
 </nav>
-
-<header class="reveal">
-    <h1>NEWS</h1>
-    <p>Startup news, tech trends, AI updates, and business ideas for builders.</p>
+<header>
+<h1>NEWS</h1>
+<p>Startup news, tech trends, AI updates, and business ideas for builders.</p>
 </header>
-
 <div class="container">
-
-<section class="featured-idea reveal">
-    <span class="featured-tag">TODAY'S OPPORTUNITY</span>
-    <h2>Building On Top Of The New Custom-Silicon Stack</h2>
-    <p>
-        With OpenAI, Google, Apple, and Meta all racing to build their own
-        chips, inference is about to get cheaper across the board. The
-        opportunity isn't competing with the labs — it's building tooling,
-        benchmarking, and migration services that help smaller companies
-        take advantage of cheaper inference as it rolls out.
-    </p>
-    <div class="insight">
-        <strong>Why it matters:</strong>
-        Every major lab is now treating custom chips as a strategic moat,
-        not just a cost play. As inference costs fall, the businesses that
-        win will be the ones already positioned to pass those savings on.
-    </div>
+<section class="featured-idea">
+<span class="featured-tag">TODAY'S OPPORTUNITY</span>
+<h2>Vertical AI Agents For Niche Workflows</h2>
+<p>Generic AI tools are everywhere. The real opportunity is building highly specialized agents for one industry's recurring workflow — legal intake, medical documentation, or creator ops — and charging for outcomes, not subscriptions.</p>
+<div class="insight"><strong>Why it matters:</strong> Agentic AI is moving out of demos and into live business operations. The winners in 2026 are not building bigger models — they are owning a single workflow and doing it better than anyone else.</div>
 </section>
-
-<h2 class="section-title reveal">Latest News</h2>
-
-<div class="news-grid reveal">
-
-    <div class="card">
-        <span class="tag">AI</span>
-        <h3>OpenAI And Broadcom Unveil Jalapeño Chip</h3>
-        <p>
-            OpenAI revealed Jalapeño, its first custom inference chip
-            built with Broadcom, designed specifically to run trained
-            models for ChatGPT, Codex, and API traffic rather than
-            training them. The goal is cutting the cost of serving AI
-            at scale as usage keeps climbing.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">SECURITY</span>
-        <h3>Anthropic Accuses Alibaba Of Mass Distillation Attack</h3>
-        <p>
-            Anthropic told US senators that roughly 25,000 fraudulent
-            accounts ran 28.8 million exchanges with Claude over six
-            weeks to extract its agentic reasoning and coding abilities.
-            No systems were breached — the accounts simply used Claude
-            like ordinary users at massive scale.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">FUNDING</span>
-        <h3>Sierra Raises $950M, Tops $15B Valuation</h3>
-        <p>
-            Bret Taylor's enterprise AI agent startup Sierra closed a
-            $950 million round led by Tiger Global and GV. The company
-            says it now serves over 40% of the Fortune 50, with agents
-            handling everything from mortgage refinancing to insurance
-            claims and returns processing.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">MARKET</span>
-        <h3>ChatGPT's Market Share Slips Below Half</h3>
-        <p>
-            A widely cited 2026 industry report found ChatGPT's share of
-            the AI assistant market fell to 46.4%, with Gemini climbing
-            to 27.7% and Claude reaching 10.3%. Claude still leads on
-            paid conversion rate, suggesting users are actively
-            comparing assistants rather than defaulting to one.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">STARTUP</span>
-        <h3>SpaceX Acquires Cursor-Maker Anysphere For $60B</h3>
-        <p>
-            SpaceX announced an all-stock acquisition of Anysphere, the
-            company behind the Cursor coding assistant, in one of the
-            AI industry's biggest deals to date. The move signals
-            coding tools are becoming core infrastructure, not just a
-            standalone product category.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">TREND</span>
-        <h3>Custom AI Chips Are Becoming The New Competitive Edge</h3>
-        <p>
-            Google, Apple, Meta, and now OpenAI are all building custom
-            silicon to cut their dependence on Nvidia. The shift signals that
-            AI infrastructure is turning into a strategic moat rather than
-            just a line item on the cloud bill.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">OPPORTUNITY</span>
-        <h3>Smaller Open-Source Models Are Closing The Gap</h3>
-        <p>
-            Compact open-source models are increasingly competitive with
-            general-purpose giants on legal, healthcare, and engineering
-            tasks, at a fraction of the cost. That's opening real space for
-            niche builders to compete without frontier-scale budgets.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">SECURITY</span>
-        <h3>"Agentjacking" Attack Hits Coding Agents Hard</h3>
-        <p>
-            A new attack class disclosed this month tricks coding agents like
-            Claude Code and Cursor into executing malicious commands hidden
-            inside fake error reports. It's already affected thousands of
-            organizations — a reminder to treat tool output as untrusted
-            input before acting on it.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">FUNDING</span>
-        <h3>AI Funding Concentrates In Fewer, Bigger Rounds</h3>
-        <p>
-            Series A rounds for AI startups now average over $50 million,
-            roughly 30% above non-AI peers. Investors are increasingly backing
-            proof over hype — pilots and a sharp problem at seed, paying
-            customers and retention by Series A.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">AI</span>
-        <h3>Qwen Unveils "AgentWorld" Simulated Training Approach</h3>
-        <p>
-            Alibaba's Qwen team introduced a model that simulates seven
-            different agent environments at once, learning to model the
-            environment itself rather than just operate inside it — a step
-            toward agents that train faster using simulation instead of
-            real-world interaction.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">OPPORTUNITY</span>
-        <h3>Context Engineering Is Replacing Prompt Engineering</h3>
-        <p>
-            As agentic workflows get longer and more complex, the real skill
-            gap is shifting from writing good prompts to building the full
-            information environment that keeps an agent reliable across many
-            steps. Builders who get ahead of this will have an edge.
-        </p>
-    </div>
-
-    <div class="card">
-        <span class="tag">IDEA</span>
-        <h3>AI Stack For Solo Operators Under $500/Month</h3>
-        <p>
-            Founders are replacing $80K-plus monthly payroll with
-            agent stacks for coding, content, support, design, and
-            automation — all under $500 a month. The one-person
-            company is no longer a constraint; it is a strategy.
-        </p>
-    </div>
-
+<h2 class="section-title">Latest News</h2>
+<div class="news-grid">
+<div class="card">
+<span class="tag">AI</span>
+<h3>OpenAI Previews Sol, Terra, And Luna Models</h3>
+<p>OpenAI previewed three new model tiers — Sol as the flagship for hard problems, Terra as a balanced everyday option, and Luna as the fast, affordable tier. Access is currently government-gated, with public availability still pending.</p>
 </div>
-
+<div class="card">
+<span class="tag">AI</span>
+<h3>Export Ban Eased For Claude Mythos 5</h3>
+<p>The US government partially lifted export controls on Anthropic's Claude Mythos 5, opening access specifically for organizations defending critical infrastructure.</p>
 </div>
-
-<section class="featured-idea reveal" style="margin:60px auto 80px; width:88%; max-width:950px;">
-    <span class="featured-tag">TRENDING</span>
-    <h2>3 Things Builders Should Watch This Week</h2>
-    <p>
-        - OpenAI entering custom silicon with Jalapeño — inference costs are about to drop<br>
-        - Anthropic vs. Alibaba distillation dispute raising questions about model access and abuse<br>
-        - SpaceX's $60B Cursor acquisition signaling coding tools are becoming core AI infrastructure
-    </p>
-    <div class="insight">
-        <strong>Takeaway:</strong>
-        The infrastructure layer of AI is being rebuilt from the ground up.
-        For builders, that means cheaper inference, smarter open models, and
-        a real shot at running a serious business alone.
-    </div>
+<div class="card">
+<span class="tag">TECH</span>
+<h3>Tech Stocks Slide As AI Spending Patience Wears Thin</h3>
+<p>The Nasdaq has fallen for a full week, down more than 6% from its early-June peak, as investors grow impatient waiting for AI infrastructure spending to show up as profit.</p>
+</div>
+<div class="card">
+<span class="tag">POLICY</span>
+<h3>Colorado's AI Act Takes Effect</h3>
+<p>Colorado becomes the first US state with a comprehensive AI law to actually go live, after being significantly narrowed by a May amendment ahead of its rollout.</p>
+</div>
+<div class="card">
+<span class="tag">TREND</span>
+<h3>Memory Chip Prices Set To Surge 40-50%</h3>
+<p>Analysts expect DRAM prices to jump sharply in Q3 2026 as AI cloud demand locks up capacity, with no real relief expected until 2028.</p>
+</div>
+<div class="card">
+<span class="tag">AI</span>
+<h3>OpenAI Unveils Its First Custom Chip</h3>
+<p>OpenAI and Broadcom revealed Jalapeño, a custom inference chip designed specifically for large language models. Built in just nine months, it targets deployment by late 2026 and aims to cut the cost of running AI at scale.</p>
+</div>
+<div class="card">
+<span class="tag">FUNDING</span>
+<h3>Anthropic Hits $965B Valuation</h3>
+<p>Anthropic closed a $65 billion Series H round, pushing its valuation past OpenAI for the first time. Run-rate revenue crossed $47 billion, and the raise is widely seen as its final private round before an IPO.</p>
+</div>
+<div class="card">
+<span class="tag">TREND</span>
+<h3>36% Of New Startups Now Have Solo Founders</h3>
+<p>Over a third of new ventures in 2026 are solo-founded. AI agent stacks costing under $500 a month are replacing functions that once required full teams, fundamentally changing startup economics.</p>
+</div>
+<div class="card">
+<span class="tag">TECH</span>
+<h3>AI Agents Are Entering Real Business Operations</h3>
+<p>Agentic AI has moved from demos to live workflows. Companies are deploying agents for sales research, support triage, and document review — with humans still in the loop for review and judgment calls.</p>
+</div>
+<div class="card">
+<span class="tag">STARTUP</span>
+<h3>Cognition AI Raises $1B At $26B Valuation</h3>
+<p>Cognition, the company behind AI software engineer Devin, closed over a billion dollars in fresh funding. It is one of the fastest-growing AI developer tools companies, reflecting massive demand for coding automation.</p>
+</div>
+<div class="card">
+<span class="tag">TREND</span>
+<h3>Custom AI Chips Are The New Competitive Edge</h3>
+<p>Google, Apple, Meta, and now OpenAI are all building custom silicon to reduce dependence on Nvidia. The shift signals that AI infrastructure is becoming a strategic moat, not just a cost center.</p>
+</div>
+<div class="card">
+<span class="tag">OPPORTUNITY</span>
+<h3>Open-Source AI Models Are Getting Smaller And Smarter</h3>
+<p>Smaller open-source models are outperforming general-purpose giants in legal, healthcare, and engineering tasks — and they cost a fraction of the price. This opens the door for niche builders.</p>
+</div>
+<div class="card">
+<span class="tag">IDEA</span>
+<h3>AI-Powered Outcome-Based Services</h3>
+<p>The most defensible AI businesses in 2026 charge for completed work, not tool access. One agent handling customer authentication, refunds, or intake — priced per resolved case — is beating traditional SaaS subscription models.</p>
+</div>
+<div class="card">
+<span class="tag">STARTUP</span>
+<h3>AI Agent Market On Track For $52B By 2030</h3>
+<p>The AI agents market has grown from $5B in 2024 to nearly $8B in 2025, with projections pointing past $50B by 2030. Autonomous systems that execute real tasks are the fastest-growing software category right now.</p>
+</div>
+<div class="card">
+<span class="tag">AI</span>
+<h3>AI Is Now Used To Design The Chips That Run AI</h3>
+<p>OpenAI used its own models to accelerate parts of the Jalapeño chip design process. AI helping build its own infrastructure is a new milestone — and a hint at how fast development cycles are about to get.</p>
+</div>
+<div class="card">
+<span class="tag">OPPORTUNITY</span>
+<h3>Context Engineering Is The New Skill Gap</h3>
+<p>Prompt engineering is being replaced by context engineering — building the full information environment that makes AI agents reliable across multi-step workflows. Founders who master this in 2026 will have a durable edge.</p>
+</div>
+<div class="card">
+<span class="tag">IDEA</span>
+<h3>AI Stack For Solo Operators Under $500/Month</h3>
+<p>Founders are replacing $80K-plus monthly payroll with agent stacks for coding, content, support, design, and automation — all under $500 a month. The one-person company is no longer a constraint; it is a strategy.</p>
+</div>
+</div>
+</div>
+<section class="featured-idea" style="margin:60px auto 80px; width:88%; max-width:950px;">
+<span class="featured-tag">TRENDING</span>
+<h2>3 Things Builders Should Watch This Week</h2>
+<p>- OpenAI entering custom silicon with Jalapeño — inference costs are about to drop<br>- Anthropic overtaking OpenAI in private valuation at $965B<br>- Solo founders scaling to $1M+ ARR without employees using AI agent stacks</p>
+<div class="insight"><strong>Takeaway:</strong> The infrastructure layer of AI is being rebuilt from the ground up. For builders, that means cheaper inference, smarter open models, and a real shot at running a serious business alone.</div>
 </section>
-
-<footer>
-    © 2026 The Akin Project
-</footer>
-
-<script>
-const reveals = document.querySelectorAll('.reveal');
-function revealOnScroll(){
-    reveals.forEach(el => {
-        if(el.getBoundingClientRect().top < window.innerHeight - 80){
-            el.classList.add('active');
-        }
-    });
-}
-window.addEventListener('scroll', revealOnScroll, {passive:true});
-revealOnScroll();
-</script>
-
+<footer>© 2026 The Akin Project</footer>
 <script>
 const c = document.getElementById('bg');
 const ctx = c.getContext('2d');
@@ -481,13 +164,10 @@ let mouse = { x: -9999, y: -9999 };
 function resize(){ W = c.width = innerWidth; H = c.height = innerHeight; }
 function init(){
   resize();
-  const isMobile = W < 700;
-  pts = Array.from({length: isMobile ? 50 : 80}, () => ({
-    x: Math.random()*W,
-    y: Math.random()*H,
-    vx: (Math.random()-.5)*.4,
-    vy: (Math.random()-.5)*.4,
-    r: isMobile ? Math.random()*1+0.5 : Math.random()*2+1
+  pts = Array.from({length:80}, () => ({
+    x: Math.random()*W, y: Math.random()*H,
+    vx: (Math.random()-.5)*.4, vy: (Math.random()-.5)*.4,
+    r: Math.random()*2+1
   }));
 }
 function draw(){
@@ -528,6 +208,5 @@ if(window.innerWidth > 700){
   document.addEventListener('mouseleave', () => { mouse.x=-9999; mouse.y=-9999; });
 }
 </script>
-
 </body>
 </html>
