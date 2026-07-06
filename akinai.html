@@ -510,7 +510,7 @@
 
         /* Interface Animations */
         @keyframes pulse {
-            0%, 100% { opacity: 0.9; }
+            0%, 100% { opacity: 0.4; }
             50% { opacity: 1; box-shadow: 0 0 14px var(--accent); }
         }
 
@@ -762,8 +762,8 @@
                     }
                 }
 
-                ctx.fillStyle = 'rgba(182, 216, 0, 0.25)';
-                if (i % 5 === 0) ctx.fillStyle = 'rgba(232, 232, 227, 0.15)'; // Intermittent light grey dot mix
+                ctx.fillStyle = 'rgba(182, 216, 0, 0.55)';
+                if (i % 5 === 0) ctx.fillStyle = 'rgba(232, 232, 227, 0.45)'; // Intermittent light grey dot mix
                 
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
