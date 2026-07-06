@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akin | AI Systems Engineer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #0A0A0A;
+            --surface: #121212;
+            --surface-border: #1F1F1F;
+            --accent: #B6D800;
+            --accent-dim: rgba(182, 216, 0, 0.15);
+            --text-main: #E8E8E3;
+            --text-muted: #7A7A75;
+            --text-dark: #4A4A45;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--surface-border);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-dark);
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Interactive Canvas Background */
+        #canvas-ambient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Custom Interactive Cursor Element */
+        #custom-cursor {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        #custom-cursor-ring {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--accent-dim);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.08s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        /* Layout Structure */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 4rem;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .brand {
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .brand span {
+            color: var(--accent);
+        }
+
+        nav {
+            display: flex;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--text-main);
+        }
+
+        /* Container Rules */
+        section {
+            position: relative;
+            min-height: 100vh;
+            padding: 8rem 4rem 4rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Scroll Animation State */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Layout - From Selection Screenshot */
+        .hero-status {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .status-pulse {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        h1.hero-title {
+            font-size: clamp(2.5rem, 6vw, 5.5rem);
+            font-weight: 600;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            max-width: 1000px;
+            color: var(--text-main);
+            margin-bottom: 2.5rem;
+        }
+
+        h1.hero-title em {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        p.hero-desc {
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            color: var(--text-muted);
+            max-width: 580px;
+            line-height: 1.6;
+            margin-bottom: 3.5rem;
+        }
+
+        p.hero-desc strong {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        .cta-row {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            padding: 1rem 1.75rem;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: #000000;
+            font-weight: 600;
+            border: 1px solid var(--accent);
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--accent);
+            box-shadow: 0 0 20px rgba(182, 216, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--surface-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            background-color: rgba(255,255,255,0.02);
+        }
+
+        /* Section Global Typo */
+        .section-label {
+            font-family: var(--font-mono);
+            color: var(--accent);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 4rem;
+        }
+
+        /* Build Log Timeline Section */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 5px;
+            bottom: 5px;
+            width: 1px;
+            background: var(--surface-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .timeline-node {
+            position: absolute;
+            left: 3px;
+            top: 6px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--text-dark);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover .timeline-node {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: 0 0 8px var(--accent);
+        }
+
+        .timeline-meta {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .timeline-meta .version {
+            color: var(--accent);
+        }
+
+        .timeline-content h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-content p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            max-width: 700px;
+        }
+
+        /* Projects Layout */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+        }
+
+        .project-card {
+            background: linear-gradient(180deg, #111111 0%, #0C0C0C 100%);
+            border: 1px solid var(--surface-border);
+            border-radius: 6px;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(800px circle at var(--mouse-x, 0) var(--mouse-y, 0), rgba(182, 216, 0, 0.06), transparent 40%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .project-card:hover {
+            border-color: rgba(182, 216, 0, 0.3);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            z-index: 2;
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--surface-border);
+            color: var(--text-muted);
+        }
+
+        .project-card:hover .tag {
+            border-color: rgba(255,255,255,0.08);
+        }
+
+        .project-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            z-index: 2;
+        }
+
+        .project-description {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            z-index: 2;
+        }
+
+        /* Inline Dev Console Metric Block */
+        .project-metrics {
+            font-family: var(--font-mono);
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.02);
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+            font-size: 0.75rem;
+            z-index: 2;
+        }
+
+        .metric-line {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.25rem;
+        }
+        .metric-line:last-child { margin-bottom: 0; }
+        .metric-label { color: var(--text-dark); }
+        .metric-val { color: var(--accent); }
+
+        .project-link {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-main);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+            z-index: 2;
+            transition: color 0.2s;
+        }
+
+        .project-link:hover {
+            color: var(--accent);
+        }
+
+        /* Tech Engine / Skills Layout */
+        .skills-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .skill-vault {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid var(--surface-border);
+            padding: 2rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .skill-vault:hover {
+            background: rgba(182, 216, 0, 0.02);
+            border-color: rgba(182, 216, 0, 0.15);
+        }
+
+        .skill-category {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.1em;
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .skill-list li::before {
+            content: '▫';
+            color: var(--text-dark);
+            font-size: 0.8rem;
+        }
+
+        .skill-vault:hover .skill-list li::before {
+            color: var(--accent);
+        }
+
+        /* Interface Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; box-shadow: 0 0 14px var(--accent); }
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .project-grid { grid-template-columns: 1fr; }
+            .skills-container { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            header { padding: 1.5rem 2rem; }
+            nav { display: none; } /* Kept clean for core layout focus */
+            section { padding: 6rem 2rem 2rem 2rem; }
+            h1.hero-title { font-size: 2.8rem; }
+            .skills-container { grid-template-columns: 1fr; }
+            #custom-cursor, #custom-cursor-ring { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="custom-cursor"></div>
+    <div id="custom-cursor-ring"></div>
+    
+    <canvas id="canvas-ambient"></canvas>
+
+    <header>
+        <a href="#" class="brand">Δ∴ <span>Akin</span></a>
+        <nav>
+            <a href="#hero" class="active">// home</a>
+            <a href="#build-log">// build_log</a>
+            <a href="#projects">// projects</a>
+            <a href="#skills">// system_stack</a>
+        </nav>
+    </header>
+
+    <section id="hero">
+        <div class="hero-status">
+            <div class="status-pulse"></div>
+            Currently benchmarking Llama 3.1 & Mistral Large
+        </div>
+        <h1 class="hero-title">Learning AI engineering <em>in public</em>, one shipped thing at a time.</h1>
+        <p class="hero-desc">
+            I'm Akin — building <strong>The Akin Project</strong>, a community for ambitious beginners, alongside <strong>NIMBench</strong>, an NVIDIA NIM benchmarking tool. No polish for polish's sake. Just real projects, tracked honestly.
+        </p>
+        <div class="cta-row">
+            <a href="#projects" class="btn btn-primary">See what I've built &rarr;</a>
+            <a href="https://github.com" target="_blank" class="btn btn-secondary">GitHub ↗</a>
+        </div>
+    </section>
+
+    <section id="build-log" class="reveal">
+        <div class="section-label">System Feed</div>
+        <h2 class="section-title">The Build Log</h2>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-node"></div>
+                <div class="timeline-meta">
+                    <span class="date">2026.04.12</span>
+                    <span class="version">v0.4.1</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>NIMBench Deployment & Parallel Execution Engine</h3>
+                    <p>Optimized concurrency limits across multiple locally hosted setups. Successfully managed high-throughput synthetic prompt distribution streams with clean connection monitoring and zero memory loss.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-node"></div>
+                <div class="timeline-meta">
+                    <span class="date">2026.02.19</span>
+                    <span class="version">v0.3.0</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>The Akin Project Foundation Architecture</h3>
+                    <p>Designed the core system setup tailored for collaborative project builds. Created an open code space focusing on minimal infrastructure delays and predictable token processing costs.</p>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-node"></div>
+                <div class="timeline-meta">
+                    <span class="date">2025.11.02</span>
+                    <span class="version">v0.1.5</span>
+                </div>
+                <div class="timeline-content">
+                    <h3>Context Optimization Module</h3>
+                    <p>Built a custom processing layer designed to strip filler data before forwarding contexts to the inference driver. Dropped token processing footprints substantially across dense logs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="reveal">
+        <div class="section-label">Production Repositories</div>
+        <h2 class="section-title">Shipped Architectures</h2>
+
+        <div class="project-grid">
+            <div class="project-card">
+                <div>
+                    <div class="project-header">
+                        <div class="project-tags">
+                            <span class="tag">NVIDIA NIM</span>
+                            <span class="tag">Python</span>
+                            <span class="tag">FastAPI</span>
+                        </div>
+                    </div>
+                    <div class="project-title">NIMBench</div>
+                    <div class="project-description">
+                        A clean, heavy-duty benchmarking toolkit written specifically to stress-test local NVIDIA NIM container pools. Evaluates performance drops over prolonged token distribution loops.
+                    </div>
+                </div>
+                <div>
+                    <div class="project-metrics">
+                        <div class="metric-line"><span class="metric-label">Target:</span><span class="metric-val">Llama-3.1-70B</span></div>
+                        <div class="metric-line"><span class="metric-label">Avg TTFT:</span><span class="metric-val">112ms</span></div>
+                        <div class="metric-line"><span class="metric-label">Concurrency Peak:</span><span class="metric-val">120 req/sec</span></div>
+                    </div>
+                    <a href="#" class="project-link">Inspect Source &rarr;</a>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div>
+                    <div class="project-header">
+                        <div class="project-tags">
+                            <span class="tag">TypeScript</span>
+                            <span class="tag">Next.js</span>
+                            <span class="tag">Vector-DB</span>
+                        </div>
+                    </div>
+                    <div class="project-title">The Akin Project</div>
+                    <div class="project-description">
+                        An active framework and repository network designed to scale up beginner AI developers. Standardizes rag tooling setups and sandbox configurations to remove boilerplate onboarding delays.
+                    </div>
+                </div>
+                <div>
+                    <div class="project-metrics">
+                        <div class="metric-line"><span class="metric-label">Active Nodes:</span><span class="metric-val">1,420+ Builders</span></div>
+                        <div class="metric-line"><span class="metric-label">Index Latency:</span><span class="metric-val">14ms</span></div>
+                        <div class="metric-line"><span class="metric-label">Status:</span><span class="metric-val">Production Stable</span></div>
+                    </div>
+                    <a href="#" class="project-link">View Workspace &rarr;</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="reveal">
+        <div class="section-label">Capabilities Matrix</div>
+        <h2 class="section-title">Core Competencies</h2>
+
+        <div class="skills-container">
+            <div class="skill-vault">
+                <div class="skill-category">Models & Tuning</div>
+                <ul class="skill-list">
+                    <li>Llama 3.1 / 3.2</li>
+                    <li>Mistral Large</li>
+                    <li>Prompt Engineering</li>
+                    <li>Context Window Opt</li>
+                </ul>
+            </div>
+
+            <div class="skill-vault">
+                <div class="skill-category">Backend Pipelines</div>
+                <ul class="skill-list">
+                    <li>Python (FastAPI)</li>
+                    <li>Node.js / TypeScript</li>
+                    <li>Asynchronous Routing</li>
+                    <li>Structured JSON Outputs</li>
+                </ul>
+            </div>
+
+            <div class="skill-vault">
+                <div class="skill-category">Vector / Retrieval</div>
+                <ul class="skill-list">
+                    <li>Pinecone / Qdrant</li>
+                    <li>Embeddings Pipelines</li>
+                    <li>Semantic Text Search</li>
+                    <li>Hybrid RAG Engines</li>
+                </ul>
+            </div>
+
+            <div class="skill-vault">
+                <div class="skill-category">Infrastructure</div>
+                <ul class="skill-list">
+                    <li>Docker Environments</li>
+                    <li>NVIDIA NIM Pools</li>
+                    <li>GitHub Workflows</li>
+                    <li>Performance Tracking</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 1. High-Performance Fluid Particle Canvas Engine
+        const canvas = document.getElementById('canvas-ambient');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 160 };
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const particleCount = Math.min(Math.floor(window.innerWidth * 0.08), 120);
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5 + 0.5,
+                    baseX: Math.random() * canvas.width,
+                    baseY: Math.random() * canvas.height,
+                    density: (Math.random() * 30) + 10,
+                    speedX: (Math.random() * 0.4) - 0.2,
+                    speedY: (Math.random() * 0.4) - 0.2
+                });
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                
+                // Idle floating vector drift
+                p.x += p.speedX;
+                p.y += p.speedY;
+                
+                // Boundary collision reset
+                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+                // Mouse interaction mathematics (Inertial Push away)
+                if (mouse.x !== null && mouse.y !== null) {
+                    let dx = mouse.x - p.x;
+                    let dy = mouse.y - p.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < mouse.radius) {
+                        let force = (mouse.radius - distance) / mouse.radius;
+                        let directionX = dx / distance;
+                        let directionY = dy / distance;
+                        p.x -= directionX * force * 4;
+                        p.y -= directionY * force * 4;
+                    }
+                }
+
+                ctx.fillStyle = 'rgba(182, 216, 0, 0.25)';
+                if (i % 5 === 0) ctx.fillStyle = 'rgba(232, 232, 227, 0.15)'; // Intermittent light grey dot mix
+                
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        initCanvas();
+        animateCanvas();
+
+        // 2. Hardware-Accelerated Interactive Custom Cursor System
+        const cursorDot = document.getElementById('custom-cursor');
+        const cursorRing = document.getElementById('custom-cursor-ring');
+
+        window.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+            
+            // Smooth lagging outer ring transformation matrix
+            cursorRing.style.left = e.clientX + 'px';
+            cursorRing.style.top = e.clientY + 'px';
+        });
+
+        // Magnetized Interaction Effect on Core UI Buttons & Links
+        const targets = document.querySelectorAll('a, .btn, .project-card');
+        targets.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                cursorDot.style.transform = 'translate(-50%, -50%) scale(2.5)';
+                cursorDot.style.backgroundColor = 'rgba(182, 216, 0, 1)';
+                cursorRing.style.width = '52px';
+                cursorRing.style.height = '52px';
+                cursorRing.style.borderColor = 'var(--accent)';
+            });
+            item.addEventListener('mouseleave', () => {
+                cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorDot.style.backgroundColor = 'var(--accent)';
+                cursorRing.style.width = '32px';
+                cursorRing.style.height = '32px';
+                cursorRing.style.borderColor = 'var(--accent-dim)';
+            });
+        });
+
+        // 3. Proximity Mouse Radial Grid Highlight Pattern (Linear-style effect)
+        const cards = document.querySelectorAll('.project-card');
+        cards.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            });
+        });
+
+        // 4. Performance Optimized Scroll Intersection Monitor
+        const revealElements = document.querySelectorAll('.reveal');
+        const navLinks = document.querySelectorAll('nav a');
+
+        const observerOptions = {
+            root: null,
+            threshold: 0.15,
+            rootMargin: '0px'
+        };
+
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Automatically highlight current viewport location in navigation line
+                    const id = entry.target.getAttribute('id');
+                    if(id) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if(link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>
