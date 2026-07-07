@@ -358,6 +358,9 @@
   @media (max-width: 640px) {
     section { padding: 90px 0; }
   }
+  @media (max-width: 640px) {
+  .status-strip .wrap { flex-direction: column; align-items: flex-start; gap: 16px; }
+}
 
   .section-head {
     margin-bottom: 64px;
@@ -648,6 +651,7 @@
   @media (max-width: 780px) {
     .skills-grid { grid-template-columns: repeat(2, 1fr); }
   }
+  
   @media (max-width: 480px) {
     .skills-grid { grid-template-columns: 1fr; }
   }
@@ -737,6 +741,19 @@
   }
 
   footer a:hover { color: var(--accent); }
+
+  .nav-links-mobile { display: none !important; }
+
+@media (max-width: 640px !important) {
+  .nav-links-desktop { display: none !important; }
+  .nav-links-mobile { display: flex; gap: 20px !important; }
+}
+
+footer .wrap {
+  justify-content: center !important;
+  text-align: center !important;
+}
+  
 </style>
 </head>
 <body>
@@ -748,13 +765,18 @@
 <div class="grain"></div>
 
 <nav>
-  <div class="logo"><span class="symbol">∆∴</span> Akin</div>
-  <div class="nav-links">
-    <a href="#work">Work</a>
-    <a href="#log">Build Log</a>
-    <a href="#skills">Skills</a>
-    <a href="#contact">Contact</a>
-  </div>
+  <div class="nav-links nav-links-desktop">
+  <a href="#work">Work</a>
+  <a href="#log">Build Log</a>
+  <a href="#skills">Skills</a>
+  <a href="#contact">Contact</a>
+  <a href="https://byakin.github.io/TheAkinProject/" target="_blank" rel="noopener">Community</a>
+  <a href="https://byakin.github.io/TheAkinProject/News.html" target="_blank" rel="noopener">News</a>
+</div>
+<div class="nav-links nav-links-mobile">
+  <a href="https://byakin.github.io/TheAkinProject/" target="_blank" rel="noopener">Community</a>
+  <a href="https://byakin.github.io/TheAkinProject/News.html" target="_blank" rel="noopener">News</a>
+</div>
 </nav>
 
 <main>
@@ -1080,7 +1102,7 @@
       r: Math.random() * 1.4 + 0.4,
       vx: (Math.random() - 0.5) * 0.15,
       vy: (Math.random() - 0.5) * 0.15,
-      alpha: Math.random() * 0.5 + 0.15,
+      alpha: Math.random() * 0.6 + 0.35,
     };
   }
 
