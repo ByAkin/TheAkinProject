@@ -883,6 +883,14 @@
                      justify-content: space-between !important;
                      text-align: left !important;
               }
+              #bg-canvas {
+                     position: fixed;
+                     inset: 0;
+                     z-index: 0;
+                     opacity: 0.5;
+                     pointer-events: none; 
+              }
+              
        </style>
 </head>
 
@@ -1158,7 +1166,7 @@
                      <div class="section-tag" style="text-align:center;">Get in touch</div>
                      <h2>Building something? Let's talk.</h2>
                      <div class="cta-buttons">
-                            <a href="mailto:iamakinnn2@gmail.com" class="btn btn-primary" data-hover>Email me →</a>
+                            <button class="btn btn-primary" data-hover onclick="navigator.clipboard.writeText('iamakinnn2@gmail.com'); alert('Email copied!')">Email me →</button>
                             <a href="https://github.com/ByAkin" class="btn btn-ghost" data-hover target="_blank"
                                    rel="noopener">GitHub ↗</a>
                      </div>
