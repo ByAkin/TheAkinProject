@@ -698,6 +698,213 @@
                      font-style: italic;
               }
 
+              /* ---------- Interactive demos ---------- */
+              .demo-grid {
+                     display: flex;
+                     flex-direction: column;
+                     gap: 32px;
+              }
+
+              .demo-card {
+                     display: grid;
+                     grid-template-columns: 1fr 1fr;
+                     gap: 0;
+                     background: var(--surface);
+                     border: 1px solid var(--border);
+                     border-radius: 12px;
+                     overflow: hidden;
+                     transition: border-color 0.4s var(--ease), transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+              }
+
+              .demo-card:hover {
+                     border-color: var(--accent-dim);
+                     transform: translateY(-4px);
+                     box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--accent-glow) inset;
+              }
+
+              @media (max-width: 900px) {
+                     .demo-card {
+                            grid-template-columns: 1fr;
+                     }
+              }
+
+              .demo-media {
+                     position: relative;
+                     min-height: 280px;
+                     background: #0d0d0d;
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+                     overflow: hidden;
+                     border-right: 1px solid var(--border);
+              }
+
+              @media (max-width: 900px) {
+                     .demo-media {
+                            border-right: none;
+                            border-bottom: 1px solid var(--border);
+                            min-height: 220px;
+                     }
+              }
+
+              .demo-media-glow {
+                     position: absolute;
+                     inset: -20%;
+                     background: radial-gradient(circle at 30% 30%, rgba(80, 140, 255, 0.18), transparent 55%);
+                     filter: blur(30px);
+                     transition: transform 0.6s var(--ease), opacity 0.6s var(--ease);
+                     pointer-events: none;
+              }
+
+              .demo-media-glow-alt {
+                     background: radial-gradient(circle at 70% 40%, var(--accent-glow), transparent 55%);
+              }
+
+              .demo-card:hover .demo-media-glow {
+                     transform: scale(1.15);
+                     opacity: 1.2;
+              }
+
+              .demo-media-frame {
+                     position: relative;
+                     z-index: 1;
+                     width: 78%;
+                     height: 60%;
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+              }
+
+              /* Glass Gesture Engine mock preview */
+              .demo-glass-mock {
+                     position: relative;
+                     width: 200px;
+                     height: 120px;
+                     border-radius: 22px;
+                     background: linear-gradient(135deg, rgba(30, 70, 160, 0.55) 0%, rgba(20, 50, 130, 0.62) 50%, rgba(15, 40, 110, 0.58) 100%);
+                     backdrop-filter: blur(14px) saturate(150%);
+                     border: 1px solid rgba(255, 255, 255, 0.28);
+                     box-shadow:
+                            inset 0 1px 1px rgba(255, 255, 255, 0.35),
+                            inset 0 -1px 1px rgba(0, 0, 0, 0.25),
+                            inset 0 0 30px rgba(80, 140, 255, 0.18),
+                            0 12px 30px rgba(0, 10, 40, 0.45);
+                     transition: transform 0.5s var(--ease);
+              }
+
+              .demo-card:hover .demo-glass-mock {
+                     transform: scale(1.06) rotate(-2deg);
+              }
+
+              .demo-glass-mock::before {
+                     content: '';
+                     position: absolute;
+                     inset: 0;
+                     border-radius: 22px;
+                     background: radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.06) 30%, transparent 60%);
+                     mix-blend-mode: screen;
+              }
+
+              .demo-glass-label {
+                     position: absolute;
+                     top: -34px;
+                     left: 50%;
+                     transform: translateX(-50%);
+                     font-family: var(--font-mono);
+                     font-size: 0.7rem;
+                     letter-spacing: 0.08em;
+                     text-transform: uppercase;
+                     color: rgba(255, 255, 255, 0.75);
+                     background: rgba(0, 0, 0, 0.35);
+                     padding: 4px 12px;
+                     border-radius: 20px;
+              }
+
+              .demo-glass-pane {
+                     position: absolute;
+                     inset: 10px;
+                     border-radius: 16px;
+                     border: 1px dashed rgba(255, 255, 255, 0.18);
+              }
+
+              /* Resume Viewer mock preview */
+              .demo-resume-mock {
+                     width: 220px;
+                     background: var(--card, #1E1C16);
+                     background: rgba(232, 167, 93, 0.06);
+                     border: 1px solid var(--border);
+                     border-radius: 14px;
+                     padding: 22px 20px;
+                     display: flex;
+                     flex-direction: column;
+                     gap: 12px;
+                     transition: transform 0.5s var(--ease);
+              }
+
+              .demo-card:hover .demo-resume-mock {
+                     transform: scale(1.06);
+              }
+
+              .demo-resume-line {
+                     height: 8px;
+                     border-radius: 4px;
+                     background: rgba(232, 167, 93, 0.35);
+              }
+
+              .demo-resume-line:first-child {
+                     background: var(--accent);
+                     opacity: 0.9;
+              }
+
+              .demo-resume-chip {
+                     margin-top: 8px;
+                     width: 64px;
+                     height: 22px;
+                     border-radius: 100px;
+                     background: rgba(182, 216, 0, 0.15);
+                     border: 1px solid var(--accent-dim);
+              }
+
+              .demo-content {
+                     padding: 40px;
+                     display: flex;
+                     flex-direction: column;
+              }
+
+              @media (max-width: 640px) {
+                     .demo-content {
+                            padding: 28px 24px;
+                     }
+              }
+
+              .demo-content h3 {
+                     font-family: var(--font-display);
+                     font-size: 1.5rem;
+                     font-weight: 600;
+                     letter-spacing: -0.01em;
+                     margin: 14px 0 12px;
+              }
+
+              .demo-content p {
+                     color: var(--text-dim);
+                     font-size: 0.98rem;
+                     line-height: 1.65;
+                     margin-bottom: 20px;
+              }
+
+              .demo-actions {
+                     margin-top: auto;
+                     padding-top: 20px;
+                     display: flex;
+                     gap: 12px;
+                     flex-wrap: wrap;
+              }
+
+              .demo-actions .btn {
+                     padding: 12px 20px;
+                     font-size: 0.8rem;
+              }
+
               /* ---------- Build log (timeline) ---------- */
               .log {
                      position: relative;
@@ -911,6 +1118,7 @@
               <!-- Laptop Links Layout -->
               <div class="nav-links nav-links-desktop">
                      <a href="#work">Work</a>
+                     <a href="#demos">Demos</a>
                      <a href="#log">Build Log</a>
                      <a href="#skills">Skills</a>
                      <a href="#contact">Contact</a>
@@ -1050,6 +1258,86 @@
 </div>
 
 </div>
+              </section>
+
+              <!-- INTERACTIVE DEMOS -->
+              <section id="demos" class="wrap">
+                     <div class="section-head reveal">
+                            <div class="section-tag">Featured Projects</div>
+                            <h2>From ideas to products.</h2>
+                            <p class="section-desc">Browse my latest work, including live demos and commercial developer 
+                                   tools built for the modern web.</p>
+                     </div>
+
+                     <div class="demo-grid">
+
+                            <div class="demo-card reveal">
+                                   <div class="demo-media">
+                                          <div class="demo-media-glow"></div>
+                                          <div class="demo-media-frame">
+                                                 <div class="demo-glass-mock">
+                                                        <span class="demo-glass-label">Lapis</span>
+                                                        <div class="demo-glass-pane"></div>
+                                                 </div>
+                                          </div>
+                                   </div>
+                                   <div class="demo-content">
+                                          <div class="project-status active"><span class="dot"></span> Shipped</div>
+                                          <h3>Glass Gesture Engine Lite</h3>
+                                          <p>Real-time hand tracking in the browser — frame a rectangle with both
+                                                 hands to summon a glassmorphic panel, resize it with your fingers,
+                                                 and swipe to cycle through live material filters.</p>
+                                          <div class="stack-row">
+                                                 <span class="stack-tag">HTML</span>
+                                                 <span class="stack-tag">CSS</span>
+                                                 <span class="stack-tag">JavaScript</span>
+                                                 <span class="stack-tag">MediaPipe</span>
+                                                 <span class="stack-tag">Computer Vision</span>
+                                          </div>
+                                          <div class="demo-actions">
+                                                 <a href="#" class="btn btn-primary" data-hover target="_blank"
+                                                        rel="noopener">video Demo →</a>
+                                                 <a href="#" class="btn btn-ghost" data-hover target="_blank"
+                                                        rel="noopener">Buy (Polar) ↗</a>
+                                          </div>
+                                   </div>
+                            </div>
+
+                            <div class="demo-card reveal">
+                                   <div class="demo-media">
+                                          <div class="demo-media-glow demo-media-glow-alt"></div>
+                                          <div class="demo-media-frame">
+                                                 <div class="demo-resume-mock">
+                                                        <div class="demo-resume-line" style="width:60%"></div>
+                                                        <div class="demo-resume-line" style="width:88%"></div>
+                                                        <div class="demo-resume-line" style="width:75%"></div>
+                                                        <div class="demo-resume-line" style="width:82%"></div>
+                                                        <div class="demo-resume-chip"></div>
+                                                 </div>
+                                          </div>
+                                   </div>
+                                   <div class="demo-content">
+                                          <div class="project-status active"><span class="dot"></span> Shipped</div>
+                                          <h3>Resume Viewer</h3>
+                                          <p>A modern web application for viewing, organizing, and sharing resumes —
+                                                 clean responsive layout, fast loading, and an honest two-pass review
+                                                 engine underneath.</p>
+                                          <div class="stack-row">
+                                                 <span class="stack-tag">HTML</span>
+                                                 <span class="stack-tag">CSS</span>
+                                                 <span class="stack-tag">JavaScript</span>
+                                                 <span class="stack-tag">Vercel Serverless</span>
+                                          </div>
+                                          <div class="demo-actions">
+                                                 <a href="https://byakin.github.io/resume-checker/" class="btn btn-primary"
+                                                        data-hover target="_blank" rel="noopener">Live Demo →</a>
+                                                 <a href="https://github.com/ByAkin" class="btn btn-ghost" data-hover
+                                                        target="_blank" rel="noopener">Source Code ↗</a>
+                                          </div>
+                                   </div>
+                            </div>
+
+                     </div>
               </section>
 
               <!-- BUILD LOG -->
