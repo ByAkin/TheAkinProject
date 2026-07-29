@@ -18,18 +18,33 @@
                      --bg: #0A0A0A;
                      --surface: #161616;
                      --surface-hover: #1D1D1D;
+                     --surface-glass: rgba(22, 22, 22, 0.6);
                      --border: #262626;
-                     --text: #E8E8E3;
-                     --text-dim: #7A7A75;
+                     --border-soft: #1E1E1E;
+                     --text: #EDEDE8;
+                     --text-dim: #8A8A84;
+                     --text-dimmer: #57574F;
                      --accent: #B6D800;
                      --accent-dim: #8AA300;
                      --accent-glow: rgba(182, 216, 0, 0.15);
+                     --accent-glow-soft: rgba(182, 216, 0, 0.08);
+                     --progress: #E8A75D;
+                     --progress-dim: rgba(232, 167, 93, 0.15);
 
                      --font-display: 'Space Grotesk', sans-serif;
                      --font-body: 'Inter', sans-serif;
                      --font-mono: 'IBM Plex Mono', monospace;
 
                      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+                     --shadow-card: 0 24px 60px -24px rgba(0, 0, 0, 0.55);
+                     --shadow-lift: 0 12px 32px -12px rgba(0, 0, 0, 0.5);
+              }
+
+              a:focus-visible,
+              button:focus-visible {
+                     outline: none;
+                     box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+                     border-radius: 3px;
               }
 
               * {
@@ -257,6 +272,25 @@
                      position: relative;
               }
 
+              .hero::before {
+                     content: '';
+                     position: absolute;
+                     top: 10%;
+                     left: -10%;
+                     width: 560px;
+                     height: 560px;
+                     background: radial-gradient(circle, var(--accent-glow-soft), transparent 65%);
+                     pointer-events: none;
+                     z-index: -1;
+              }
+
+              @media (max-width: 780px) {
+                     .hero::before {
+                            width: 380px;
+                            height: 380px;
+                     }
+              }
+
               .eyebrow {
                      font-family: var(--font-mono);
                      font-size: 0.8rem;
@@ -284,8 +318,8 @@
                      font-family: var(--font-display);
                      font-weight: 700;
                      font-size: clamp(1.9rem, 3vw + 4.5vh, 5.2rem);
-                     line-height: 1.05;
-                     letter-spacing: -0.03em;
+                     line-height: 1.06;
+                     letter-spacing: -0.035em;
                      max-width: 15ch;
                      opacity: 0;
                      animation: fade-up 0.9s var(--ease) 0.25s forwards;
@@ -294,11 +328,13 @@
               h1 .accent-word {
                      color: var(--accent);
                      font-style: italic;
+                     text-shadow: 0 0 34px var(--accent-glow-soft);
               }
 
               .hero-sub {
                      margin-top: clamp(16px, 3vh, 28px);
                      font-size: clamp(1rem, 2vw, 1.2rem);
+                     line-height: 1.65;
                      color: var(--text-dim);
                      max-width: 46ch;
                      opacity: 0;
@@ -327,28 +363,33 @@
                      display: inline-flex;
                      align-items: center;
                      gap: 10px;
-                     transition: transform 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease);
+                     transition: transform 0.3s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
               }
 
               .btn-primary {
                      background: var(--accent);
                      color: var(--bg);
                      font-weight: 500;
+                     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 8px 24px -10px var(--accent-glow);
               }
 
               .btn-primary:hover {
                      transform: translateY(-2px);
                      background: #c4e900;
+                     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 12px 32px -10px rgba(182, 216, 0, 0.35);
               }
 
               .btn-ghost {
                      border: 1px solid var(--border);
                      color: var(--text);
+                     background: rgba(255, 255, 255, 0.015);
               }
 
               .btn-ghost:hover {
-                     border-color: var(--text-dim);
+                     border-color: var(--accent-dim);
+                     color: var(--accent);
                      transform: translateY(-2px);
+                     box-shadow: 0 8px 24px -14px var(--accent-glow);
               }
 
               @media (max-height: 780px) {
@@ -477,6 +518,20 @@
                      letter-spacing: 0.06em;
                      text-transform: uppercase;
                      margin-bottom: 16px;
+                     display: flex;
+                     align-items: center;
+                     gap: 8px;
+              }
+
+              .section-tag::before {
+                     content: '';
+                     width: 14px;
+                     height: 1px;
+                     background: var(--accent-dim);
+              }
+
+              .cta-section .section-tag {
+                     justify-content: center;
               }
 
               h2 {
@@ -550,6 +605,7 @@
                      border: 1px solid var(--border);
                      border-radius: 8px;
                      overflow: hidden;
+                     box-shadow: var(--shadow-card);
               }
 
               .project-card {
@@ -579,6 +635,75 @@
 
               .project-card:hover {
                      background: var(--surface-hover);
+              }
+
+              /* Featured project (e.g. Jarvis) — same system, slightly elevated */
+              .project-card.featured {
+                     background: linear-gradient(180deg, var(--surface) 0%, #141814 100%);
+              }
+
+              .project-card.featured::after {
+                     content: '';
+                     position: absolute;
+                     inset: 0;
+                     border: 1px solid transparent;
+                     background: linear-gradient(135deg, var(--accent-dim), transparent 30%) border-box;
+                     -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+                     -webkit-mask-composite: xor;
+                     mask-composite: exclude;
+                     opacity: 0.35;
+                     pointer-events: none;
+              }
+
+              .project-card.featured:hover {
+                     background: linear-gradient(180deg, var(--surface-hover) 0%, #171c17 100%);
+              }
+
+              .featured-badge {
+                     font-family: var(--font-mono);
+                     font-size: 0.68rem;
+                     letter-spacing: 0.08em;
+                     text-transform: uppercase;
+                     color: var(--bg);
+                     background: var(--accent);
+                     padding: 3px 9px;
+                     border-radius: 100px;
+                     margin-left: 10px;
+                     vertical-align: middle;
+                     font-weight: 600;
+              }
+
+              .project-status.building {
+                     color: var(--progress);
+                     border-color: rgba(232, 167, 93, 0.35);
+              }
+
+              .feature-list {
+                     display: grid;
+                     grid-template-columns: repeat(2, 1fr);
+                     gap: 8px 16px;
+                     margin-bottom: 22px;
+              }
+
+              @media (max-width: 480px) {
+                     .feature-list {
+                            grid-template-columns: 1fr;
+                     }
+              }
+
+              .feature-list li {
+                     list-style: none;
+                     font-size: 0.85rem;
+                     color: var(--text-dim);
+                     display: flex;
+                     align-items: baseline;
+                     gap: 8px;
+              }
+
+              .feature-list li::before {
+                     content: '→';
+                     color: var(--accent-dim);
+                     font-size: 0.75rem;
               }
 
               .project-meta,
@@ -688,6 +813,16 @@
                      border: 1px solid var(--border);
                      padding: 5px 10px;
                      border-radius: 4px;
+                     transition: border-color 0.25s var(--ease), color 0.25s var(--ease);
+              }
+
+              .project-card:hover .stack-tag {
+                     border-color: var(--border-soft);
+              }
+
+              .stack-tag:hover {
+                     border-color: var(--accent-dim);
+                     color: var(--accent);
               }
 
               .honest-note {
@@ -696,213 +831,6 @@
                      border-left: 2px solid var(--accent-dim);
                      padding-left: 14px;
                      font-style: italic;
-              }
-
-              /* ---------- Interactive demos ---------- */
-              .demo-grid {
-                     display: flex;
-                     flex-direction: column;
-                     gap: 32px;
-              }
-
-              .demo-card {
-                     display: grid;
-                     grid-template-columns: 1fr 1fr;
-                     gap: 0;
-                     background: var(--surface);
-                     border: 1px solid var(--border);
-                     border-radius: 12px;
-                     overflow: hidden;
-                     transition: border-color 0.4s var(--ease), transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
-              }
-
-              .demo-card:hover {
-                     border-color: var(--accent-dim);
-                     transform: translateY(-4px);
-                     box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--accent-glow) inset;
-              }
-
-              @media (max-width: 900px) {
-                     .demo-card {
-                            grid-template-columns: 1fr;
-                     }
-              }
-
-              .demo-media {
-                     position: relative;
-                     min-height: 280px;
-                     background: #0d0d0d;
-                     display: flex;
-                     align-items: center;
-                     justify-content: center;
-                     overflow: hidden;
-                     border-right: 1px solid var(--border);
-              }
-
-              @media (max-width: 900px) {
-                     .demo-media {
-                            border-right: none;
-                            border-bottom: 1px solid var(--border);
-                            min-height: 220px;
-                     }
-              }
-
-              .demo-media-glow {
-                     position: absolute;
-                     inset: -20%;
-                     background: radial-gradient(circle at 30% 30%, rgba(80, 140, 255, 0.18), transparent 55%);
-                     filter: blur(30px);
-                     transition: transform 0.6s var(--ease), opacity 0.6s var(--ease);
-                     pointer-events: none;
-              }
-
-              .demo-media-glow-alt {
-                     background: radial-gradient(circle at 70% 40%, var(--accent-glow), transparent 55%);
-              }
-
-              .demo-card:hover .demo-media-glow {
-                     transform: scale(1.15);
-                     opacity: 1.2;
-              }
-
-              .demo-media-frame {
-                     position: relative;
-                     z-index: 1;
-                     width: 78%;
-                     height: 60%;
-                     display: flex;
-                     align-items: center;
-                     justify-content: center;
-              }
-
-              /* Glass Gesture Engine mock preview */
-              .demo-glass-mock {
-                     position: relative;
-                     width: 200px;
-                     height: 120px;
-                     border-radius: 22px;
-                     background: linear-gradient(135deg, rgba(30, 70, 160, 0.55) 0%, rgba(20, 50, 130, 0.62) 50%, rgba(15, 40, 110, 0.58) 100%);
-                     backdrop-filter: blur(14px) saturate(150%);
-                     border: 1px solid rgba(255, 255, 255, 0.28);
-                     box-shadow:
-                            inset 0 1px 1px rgba(255, 255, 255, 0.35),
-                            inset 0 -1px 1px rgba(0, 0, 0, 0.25),
-                            inset 0 0 30px rgba(80, 140, 255, 0.18),
-                            0 12px 30px rgba(0, 10, 40, 0.45);
-                     transition: transform 0.5s var(--ease);
-              }
-
-              .demo-card:hover .demo-glass-mock {
-                     transform: scale(1.06) rotate(-2deg);
-              }
-
-              .demo-glass-mock::before {
-                     content: '';
-                     position: absolute;
-                     inset: 0;
-                     border-radius: 22px;
-                     background: radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.06) 30%, transparent 60%);
-                     mix-blend-mode: screen;
-              }
-
-              .demo-glass-label {
-                     position: absolute;
-                     top: -34px;
-                     left: 50%;
-                     transform: translateX(-50%);
-                     font-family: var(--font-mono);
-                     font-size: 0.7rem;
-                     letter-spacing: 0.08em;
-                     text-transform: uppercase;
-                     color: rgba(255, 255, 255, 0.75);
-                     background: rgba(0, 0, 0, 0.35);
-                     padding: 4px 12px;
-                     border-radius: 20px;
-              }
-
-              .demo-glass-pane {
-                     position: absolute;
-                     inset: 10px;
-                     border-radius: 16px;
-                     border: 1px dashed rgba(255, 255, 255, 0.18);
-              }
-
-              /* Resume Viewer mock preview */
-              .demo-resume-mock {
-                     width: 220px;
-                     background: var(--card, #1E1C16);
-                     background: rgba(232, 167, 93, 0.06);
-                     border: 1px solid var(--border);
-                     border-radius: 14px;
-                     padding: 22px 20px;
-                     display: flex;
-                     flex-direction: column;
-                     gap: 12px;
-                     transition: transform 0.5s var(--ease);
-              }
-
-              .demo-card:hover .demo-resume-mock {
-                     transform: scale(1.06);
-              }
-
-              .demo-resume-line {
-                     height: 8px;
-                     border-radius: 4px;
-                     background: rgba(232, 167, 93, 0.35);
-              }
-
-              .demo-resume-line:first-child {
-                     background: var(--accent);
-                     opacity: 0.9;
-              }
-
-              .demo-resume-chip {
-                     margin-top: 8px;
-                     width: 64px;
-                     height: 22px;
-                     border-radius: 100px;
-                     background: rgba(182, 216, 0, 0.15);
-                     border: 1px solid var(--accent-dim);
-              }
-
-              .demo-content {
-                     padding: 40px;
-                     display: flex;
-                     flex-direction: column;
-              }
-
-              @media (max-width: 640px) {
-                     .demo-content {
-                            padding: 28px 24px;
-                     }
-              }
-
-              .demo-content h3 {
-                     font-family: var(--font-display);
-                     font-size: 1.5rem;
-                     font-weight: 600;
-                     letter-spacing: -0.01em;
-                     margin: 14px 0 12px;
-              }
-
-              .demo-content p {
-                     color: var(--text-dim);
-                     font-size: 0.98rem;
-                     line-height: 1.65;
-                     margin-bottom: 20px;
-              }
-
-              .demo-actions {
-                     margin-top: auto;
-                     padding-top: 20px;
-                     display: flex;
-                     gap: 12px;
-                     flex-wrap: wrap;
-              }
-
-              .demo-actions .btn {
-                     padding: 12px 20px;
-                     font-size: 0.8rem;
               }
 
               /* ---------- Build log (timeline) ---------- */
@@ -969,59 +897,120 @@
               }
 
               /* ---------- Skills ---------- */
-              .skills-grid {
+              .skill-groups {
                      display: grid;
-                     grid-template-columns: repeat(3, 1fr);
+                     grid-template-columns: repeat(2, 1fr);
                      gap: 1px;
                      background: var(--border);
                      border: 1px solid var(--border);
                      border-radius: 8px;
                      overflow: hidden;
+                     box-shadow: var(--shadow-card);
               }
 
               @media (max-width: 780px) {
-                     .skills-grid {
-                            grid-template-columns: repeat(2, 1fr);
-                     }
-              }
-
-              @media (max-width: 480px) {
-                     .skills-grid {
+                     .skill-groups {
                             grid-template-columns: 1fr;
                      }
               }
 
-              .skill-cell {
+              .skill-group {
                      background: var(--surface);
-                     padding: 26px 24px;
+                     padding: 28px 28px 30px;
                      transition: background 0.3s var(--ease);
               }
 
-              .skill-cell:hover {
+              .skill-group:hover {
                      background: var(--surface-hover);
               }
 
-              .skill-cell .skill-name {
-                     font-family: var(--font-display);
-                     font-weight: 600;
-                     font-size: 1rem;
-                     margin-bottom: 6px;
-              }
-
-              .skill-cell .skill-level {
+              .skill-group-name {
                      font-family: var(--font-mono);
-                     font-size: 0.7rem;
+                     font-size: 0.72rem;
                      color: var(--accent);
                      text-transform: uppercase;
-                     letter-spacing: 0.04em;
-                     margin-bottom: 10px;
+                     letter-spacing: 0.06em;
+                     margin-bottom: 16px;
                      display: block;
               }
 
-              .skill-cell .skill-note {
-                     font-size: 0.85rem;
-                     color: var(--text-dim);
-                     line-height: 1.5;
+              .skill-badges {
+                     display: flex;
+                     flex-wrap: wrap;
+                     gap: 8px;
+              }
+
+              .skill-badge {
+                     font-family: var(--font-mono);
+                     font-size: 0.78rem;
+                     color: var(--text);
+                     background: rgba(255, 255, 255, 0.04);
+                     border: 1px solid var(--border);
+                     padding: 7px 12px;
+                     border-radius: 5px;
+                     transition: border-color 0.25s var(--ease), color 0.25s var(--ease), transform 0.25s var(--ease);
+              }
+
+              .skill-group:hover .skill-badge {
+                     border-color: var(--border-soft);
+              }
+
+              .skill-badge:hover {
+                     border-color: var(--accent-dim);
+                     color: var(--accent);
+                     transform: translateY(-1px);
+              }
+
+              .skill-badge.learning {
+                     color: var(--progress);
+                     border-color: rgba(232, 167, 93, 0.3);
+                     background: var(--progress-dim);
+              }
+
+              .skill-group .skill-badge.learning::after {
+                     content: '· learning';
+                     opacity: 0.8;
+                     font-size: 0.9em;
+              }
+
+              /* Currently learning strip */
+              .learning-strip {
+                     margin-top: 24px;
+                     border: 1px solid var(--border);
+                     border-radius: 8px;
+                     padding: 22px 28px;
+                     background: var(--surface);
+                     display: flex;
+                     align-items: center;
+                     gap: 20px;
+                     flex-wrap: wrap;
+              }
+
+              .learning-strip .label {
+                     font-family: var(--font-mono);
+                     font-size: 0.72rem;
+                     color: var(--progress);
+                     text-transform: uppercase;
+                     letter-spacing: 0.06em;
+                     display: flex;
+                     align-items: center;
+                     gap: 8px;
+                     white-space: nowrap;
+              }
+
+              .learning-strip .label .dot {
+                     width: 5px;
+                     height: 5px;
+                     border-radius: 50%;
+                     background: var(--progress);
+                     box-shadow: 0 0 8px var(--progress);
+                     animation: pulse 2s ease-in-out infinite;
+              }
+
+              .learning-strip .items {
+                     display: flex;
+                     flex-wrap: wrap;
+                     gap: 8px;
               }
 
               /* ---------- Vision ---------- */
@@ -1118,7 +1107,6 @@
               <!-- Laptop Links Layout -->
               <div class="nav-links nav-links-desktop">
                      <a href="#work">Work</a>
-                     <a href="#demos">Demos</a>
                      <a href="#log">Build Log</a>
                      <a href="#skills">Skills</a>
                      <a href="#contact">Contact</a>
@@ -1160,8 +1148,8 @@
                             <div class="status-item"><span class="live-dot"></span> Status: <span class="val">Actively
                                           building</span></div>
                             <div class="status-item">Based in <span class="val">India</span></div>
-                            <div class="status-item">Focus <span class="val">GPU inference · benchmarking ·
-                                          Python</span></div>
+                            <div class="status-item">Focus <span class="val">AI assistants · GPU inference ·
+                                          benchmarking</span></div>
                             <div class="status-item">Path <span class="val">CS + EE → AI Engineer</span></div>
                      </div>
               </div>
@@ -1177,6 +1165,61 @@
                      </div>
 
                      <div class="project-grid reveal">
+
+                            <div class="project-card featured">
+                                   <div class="project-meta">
+                                          <div class="project-index">00 / Jarvis</div>
+                                          <div class="project-status building"><span class="dot"></span> Currently building</div>
+                                          <h3>Jarvis<span class="featured-badge">Featured</span></h3>
+                                          <div class="project-links">
+                                                 <a href="https://github.com/ByAkin" target="_blank" rel="noopener"
+                                                        data-hover>GitHub ↗</a>
+                                          </div>
+                                   </div>
+                                   <div class="project-body">
+                                          <p>A next-generation AI assistant designed to move beyond traditional
+                                                 chatbots. Jarvis combines <strong style="color:var(--text)">voice
+                                                        interaction</strong>, <strong
+                                                        style="color:var(--text)">computer vision</strong>, long-term
+                                                 memory, AI agents, and system automation into a single assistant that
+                                                 can understand, reason, and take actions across devices.</p>
+                                          <p>Current capabilities include voice conversations, screen understanding,
+                                                 automation workflows, and a modular AI architecture — with future
+                                                 plans for AR glasses integration and always-available ambient
+                                                 computing.</p>
+                                          <ul class="feature-list">
+                                                 <li>Voice-first interaction</li>
+                                                 <li>Computer vision</li>
+                                                 <li>Screen understanding</li>
+                                                 <li>Long-term memory</li>
+                                                 <li>AI agents</li>
+                                                 <li>Function calling</li>
+                                                 <li>File understanding</li>
+                                                 <li>Real-time web access</li>
+                                                 <li>Automation workflows</li>
+                                                 <li>Multi-model support</li>
+                                                 <li>AR glasses integration</li>
+                                                 <li>Cross-device experience</li>
+                                          </ul>
+                                          <div class="stack-row">
+                                                 <span class="stack-tag">Python</span>
+                                                 <span class="stack-tag">Electron</span>
+                                                 <span class="stack-tag">TypeScript</span>
+                                                 <span class="stack-tag">React</span>
+                                                 <span class="stack-tag">Node.js</span>
+                                                 <span class="stack-tag">NVIDIA NIM</span>
+                                                 <span class="stack-tag">OpenAI APIs</span>
+                                                 <span class="stack-tag">Gemini APIs</span>
+                                                 <span class="stack-tag">Local LLMs</span>
+                                                 <span class="stack-tag">Whisper</span>
+                                                 <span class="stack-tag">Three.js</span>
+                                                 <span class="stack-tag">Git</span>
+                                          </div>
+                                          <div class="honest-note">Early architecture stage — voice pipeline and
+                                                 screen understanding are functional; agent orchestration and AR
+                                                 integration are still ahead.</div>
+                                   </div>
+                            </div>
 
                             <div class="project-card">
                                    <div class="project-meta">
@@ -1238,12 +1281,12 @@
                            <div class="project-card">
        <div class="project-meta">
               <div class="project-index">03 / Resume Reviewer</div>
-              <div class="project-status active"><span class="dot"></span> Shipped</div>
+              <div class="project-status"><span class="dot"></span> Shipped</div>
               <h3>Resume Reviewer</h3>
               <div class="project-links">
-                     <a href="https://github.com/ByAkin/resume-checker" target="_blank" rel="noopener" data-hover>GitHub ↗</a>
+                     <a href="https://github.com/ByAkin" target="_blank" rel="noopener" data-hover>GitHub ↗</a>
                      <a href="https://byakin.github.io/resume-checker/" target="_blank" rel="noopener" data-hover>Resume reviewer ↗</a>
-              </div> 
+              </div> <!-- Fixed unclosed div here -->
        </div>
        <div class="project-body">
               <p>A two-pass tool: one API call generates the review, a second fact-checks
@@ -1258,115 +1301,6 @@
 </div>
 
 </div>
-
-                     <div class="project-card">
-    <div class="project-meta">
-        <div class="project-index">04 / Glass Gesture Engine</div>
-        <div class="project-status active"><span class="dot"></span> Available</div>
-
-        <h3>Glass Gesture Engine</h3>
-
-        <div class="project-links">
-            <a href="https://buy.polar.sh/polar_cl_pA9sDRfz0cwwNUfWy7xUej2qSsidV4hbeNymh1Wlclw" target="_blank" rel="noopener" data-hover>Buy ↗</a>
-            <a href="#" target="_blank" rel="noopener" data-hover>video Preview ↗</a>
-        </div>
-    </div>
-
-    <div class="project-body">
-        <p>
-            A browser-based hand tracking toolkit featuring real-time gesture recognition,
-            swipe controls, air drawing, and customizable glass effects. Built for developers
-            creating interactive web experiences.
-        </p>
-
-        <div class="stack-row">
-            <span class="stack-tag">MediaPipe</span>
-            <span class="stack-tag">JavaScript</span>
-            <span class="stack-tag">Computer Vision</span>
-            <span class="stack-tag">Glass UI</span>
-        </div>
-    </div>
-</div>
-              </section>
-
-              <!-- INTERACTIVE DEMOS -->
-              <section id="demos" class="wrap">
-                     <div class="section-head reveal">
-                            <div class="section-tag">Featured Projects</div>
-                            <h2>From ideas to products.</h2>
-                            <p class="section-desc">Browse my latest work, including live demos and commercial developer 
-                                   tools built for the modern web.</p>
-                     </div>
-
-                     <div class="demo-grid">
-
-                            <div class="demo-card reveal">
-                                   <div class="demo-media">
-                                          <div class="demo-media-glow"></div>
-                                          <div class="demo-media-frame">
-                                                 <div class="demo-glass-mock">
-                                                        <span class="demo-glass-label">Lapis</span>
-                                                        <div class="demo-glass-pane"></div>
-                                                 </div>
-                                          </div>
-                                   </div>
-                                   <div class="demo-content">
-                                          <div class="project-status active"><span class="dot"></span> Shipped</div>
-                                          <h3>Glass Gesture Engine Lite</h3>
-                                          <p>Real-time hand tracking in the browser — frame a rectangle with both
-                                                 hands to summon a glassmorphic panel, resize it with your fingers,
-                                                 and swipe to cycle through live material filters.</p>
-                                          <div class="stack-row">
-                                                 <span class="stack-tag">HTML</span>
-                                                 <span class="stack-tag">CSS</span>
-                                                 <span class="stack-tag">JavaScript</span>
-                                                 <span class="stack-tag">MediaPipe</span>
-                                                 <span class="stack-tag">Computer Vision</span>
-                                          </div>
-                                          <div class="demo-actions">
-                                                 <a href="#" class="btn btn-primary" data-hover target="_blank"
-                                                        rel="noopener">video Demo →</a>
-                                                 <a href="https://buy.polar.sh/polar_cl_pA9sDRfz0cwwNUfWy7xUej2qSsidV4hbeNymh1Wlclw" class="btn btn-ghost" data-hover target="_blank"
-                                                        rel="noopener">Buy (Polar) ↗</a>
-                                          </div>
-                                   </div>
-                            </div>
-
-                            <div class="demo-card reveal">
-                                   <div class="demo-media">
-                                          <div class="demo-media-glow demo-media-glow-alt"></div>
-                                          <div class="demo-media-frame">
-                                                 <div class="demo-resume-mock">
-                                                        <div class="demo-resume-line" style="width:60%"></div>
-                                                        <div class="demo-resume-line" style="width:88%"></div>
-                                                        <div class="demo-resume-line" style="width:75%"></div>
-                                                        <div class="demo-resume-line" style="width:82%"></div>
-                                                        <div class="demo-resume-chip"></div>
-                                                 </div>
-                                          </div>
-                                   </div>
-                                   <div class="demo-content">
-                                          <div class="project-status active"><span class="dot"></span> Shipped</div>
-                                          <h3>Resume Viewer</h3>
-                                          <p>A modern web application for viewing, organizing, and sharing resumes —
-                                                 clean responsive layout, fast loading, and an honest two-pass review
-                                                 engine underneath.</p>
-                                          <div class="stack-row">
-                                                 <span class="stack-tag">HTML</span>
-                                                 <span class="stack-tag">CSS</span>
-                                                 <span class="stack-tag">JavaScript</span>
-                                                 <span class="stack-tag">Vercel Serverless</span>
-                                          </div>
-                                          <div class="demo-actions">
-                                                 <a href="https://byakin.github.io/resume-checker/" class="btn btn-primary"
-                                                        data-hover target="_blank" rel="noopener">Live Demo →</a>
-                                                 <a href="https://github.com/ByAkin" class="btn btn-ghost" data-hover
-                                                        target="_blank" rel="noopener">Source Code ↗</a>
-                                          </div>
-                                   </div>
-                            </div>
-
-                     </div>
               </section>
 
               <!-- BUILD LOG -->
@@ -1397,13 +1331,6 @@
                                    <p>Shipped a two-pass generation + fact-check tool — small in scope, real in
                                           architecture.</p>
                             </div>
-
-                            <div class="log-entry">
-                                   <div class="log-date">Recent</div>
-                                   <h4>Glass Gesture Engine Lite</h4>
-                                   <p>Shipped real-time hand tracking with interactive glass effects.</p>
-                            </div>
-                            
                             <div class="log-entry">
                                    <div class="log-date">Earlier</div>
                                    <h4>LinkedIn + content experiments</h4>
@@ -1425,45 +1352,73 @@
                      <div class="section-head reveal">
                             <div class="section-tag">Current skill set</div>
                             <h2>What I can actually do right now.</h2>
-                            <p class="section-desc">Rated honestly — "learning" means learning, not a humble-brag.</p>
+                            <p class="section-desc">Grouped by area, tagged honestly — amber means still learning,
+                                   not a humble-brag.</p>
                      </div>
 
-                     <div class="skills-grid reveal">
-                            <div class="skill-cell">
-                                   <span class="skill-level">Learning</span>
-                                   <div class="skill-name">Python</div>
-                                   <div class="skill-note">Fundamentals through functions and data structures. Working
-                                          toward the projects that need it, not there yet.</div>
+                     <div class="skill-groups reveal">
+                            <div class="skill-group">
+                                   <span class="skill-group-name">Languages</span>
+                                   <div class="skill-badges">
+                                          <span class="skill-badge">Python</span>
+                                          <span class="skill-badge">TypeScript</span>
+                                          <span class="skill-badge">JavaScript</span>
+                                          <span class="skill-badge">HTML</span>
+                                          <span class="skill-badge">CSS</span>
+                                   </div>
                             </div>
-                            <div class="skill-cell">
-                                   <span class="skill-level">Working knowledge</span>
-                                   <div class="skill-name">NVIDIA NIM API</div>
-                                   <div class="skill-note">Shipped three production integrations across separate tools,
-                                          with a proxy layer to keep keys secure.</div>
+                            <div class="skill-group">
+                                   <span class="skill-group-name">AI &amp; Machine Learning</span>
+                                   <div class="skill-badges">
+                                          <span class="skill-badge">Prompt Engineering</span>
+                                          <span class="skill-badge">LLM Integration</span>
+                                          <span class="skill-badge">AI Agents</span>
+                                          <span class="skill-badge">RAG</span>
+                                          <span class="skill-badge">Function Calling</span>
+                                          <span class="skill-badge">Speech Recognition</span>
+                                          <span class="skill-badge">Text-to-Speech</span>
+                                          <span class="skill-badge learning">Computer Vision</span>
+                                          <span class="skill-badge learning">Machine Learning</span>
+                                   </div>
                             </div>
-                            <div class="skill-cell">
-                                   <span class="skill-level">Learning</span>
-                                   <div class="skill-name">LLM benchmarking</div>
-                                   <div class="skill-note">Building NIMBench to compare model latency, throughput, and
-                                          quality — first real runs in progress.</div>
+                            <div class="skill-group">
+                                   <span class="skill-group-name">Frameworks &amp; Libraries</span>
+                                   <div class="skill-badges">
+                                          <span class="skill-badge">React</span>
+                                          <span class="skill-badge">Electron</span>
+                                          <span class="skill-badge">Node.js</span>
+                                          <span class="skill-badge">Three.js</span>
+                                   </div>
                             </div>
-                            <div class="skill-cell">
-                                   <span class="skill-level">Comfortable</span>
-                                   <div class="skill-name">Frontend build &amp; deploy</div>
-                                   <div class="skill-note">GitHub Pages, Vercel serverless functions, canvas-based UI —
-                                          the full path from idea to live site.</div>
+                            <div class="skill-group">
+                                   <span class="skill-group-name">AI Platforms</span>
+                                   <div class="skill-badges">
+                                          <span class="skill-badge">NVIDIA NIM</span>
+                                          <span class="skill-badge">OpenAI</span>
+                                          <span class="skill-badge">Gemini</span>
+                                          <span class="skill-badge">Claude</span>
+                                          <span class="skill-badge">Ollama</span>
+                                   </div>
                             </div>
-                            <div class="skill-cell">
-                                   <span class="skill-level">Comfortable</span>
-                                   <div class="skill-name">Terminal / Git workflow</div>
-                                   <div class="skill-note">Went from terminal-avoidant to shipping real projects through
-                                          it — including this site.</div>
+                            <div class="skill-group" style="grid-column: 1 / -1;">
+                                   <span class="skill-group-name">Tools</span>
+                                   <div class="skill-badges">
+                                          <span class="skill-badge">Git</span>
+                                          <span class="skill-badge">GitHub</span>
+                                          <span class="skill-badge">VS Code</span>
+                                          <span class="skill-badge">Figma</span>
+                                          <span class="skill-badge learning">Docker</span>
+                                   </div>
                             </div>
-                            <div class="skill-cell">
-                                   <span class="skill-level">Learning</span>
-                                   <div class="skill-name">GPU inference &amp; optimization</div>
-                                   <div class="skill-note">The actual long-term focus. Everything above is scaffolding
-                                          toward this.</div>
+                     </div>
+
+                     <div class="learning-strip reveal">
+                            <span class="label"><span class="dot"></span> Currently learning</span>
+                            <div class="items">
+                                   <span class="skill-badge learning">Computer Vision</span>
+                                   <span class="skill-badge learning">Machine Learning</span>
+                                   <span class="skill-badge learning">Docker</span>
+                                   <span class="skill-badge learning">GPU inference &amp; optimization</span>
                             </div>
                      </div>
               </section>
@@ -1476,11 +1431,12 @@
                      </div>
                      <div class="vision reveal">
                             <blockquote>
-                                   I'm not presenting as a finished AI engineer, because I'm not one yet. I'm a beginner
-                                   with a <span class="hl">CS + EE</span> path ahead of me, a real focus on <span
-                                          class="hl">GPU computing and inference optimization</span>, and a habit of
-                                   shipping instead of just planning. This page will look different in a year — and I'd
-                                   rather you see the honest version now than a version I have to grow into later.
+                                   I'm passionate about building AI experiences that feel <span class="hl">natural
+                                          rather than mechanical</span>. My current focus is creating intelligent
+                                   assistants, experimenting with <span class="hl">computer vision</span>, and
+                                   exploring how AI can move beyond chat into everyday interactions. I'm especially
+                                   interested in the future of <span class="hl">ambient computing</span>, AR
+                                   interfaces, and software that feels genuinely helpful.
                             </blockquote>
                      </div>
               </section>
