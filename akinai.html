@@ -332,13 +332,161 @@
                      }
               }
 
+              /* Scroll progress indicator */
+              .scroll-progress {
+                     position: absolute;
+                     bottom: 0;
+                     left: 0;
+                     height: 2px;
+                     width: 0%;
+                     background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+                     box-shadow: 0 0 8px var(--accent-glow);
+                     transform-origin: left;
+                     will-change: width;
+              }
+
+              /* Animated underline on desktop nav links */
+              .nav-links-desktop a {
+                     position: relative;
+                     padding-bottom: 3px;
+              }
+
+              .nav-links-desktop a::after {
+                     content: '';
+                     position: absolute;
+                     left: 0;
+                     bottom: -2px;
+                     width: 100%;
+                     height: 1px;
+                     background: var(--accent);
+                     transform: scaleX(0);
+                     transform-origin: right;
+                     transition: transform 0.3s ease-out;
+              }
+
+              .nav-links-desktop a:hover::after,
+              .nav-links-desktop a.active::after {
+                     transform: scaleX(1);
+                     transform-origin: left;
+              }
+
               /* Desktop vs Mobile display logic */
               .nav-links-desktop {
                      display: flex;
               }
 
-              .nav-links-mobile {
+              .nav-burger {
                      display: none;
+                     flex-direction: column;
+                     justify-content: center;
+                     gap: 5px;
+                     width: 34px;
+                     height: 34px;
+                     background: none;
+                     border: none;
+                     cursor: pointer;
+                     padding: 0;
+                     z-index: 110;
+              }
+
+              .nav-burger span {
+                     display: block;
+                     width: 100%;
+                     height: 1.5px;
+                     background: var(--text);
+                     border-radius: 2px;
+                     transition: transform 0.3s var(--ease), opacity 0.3s var(--ease);
+              }
+
+              .nav-burger[aria-expanded="true"] span:nth-child(1) {
+                     transform: translateY(6.5px) rotate(45deg);
+              }
+
+              .nav-burger[aria-expanded="true"] span:nth-child(2) {
+                     opacity: 0;
+              }
+
+              .nav-burger[aria-expanded="true"] span:nth-child(3) {
+                     transform: translateY(-6.5px) rotate(-45deg);
+              }
+
+              .nav-drawer {
+                     position: fixed;
+                     top: 0;
+                     right: 0;
+                     bottom: 0;
+                     width: min(78vw, 320px);
+                     background: rgba(10, 10, 10, 0.96);
+                     backdrop-filter: blur(24px) saturate(160%);
+                     -webkit-backdrop-filter: blur(24px) saturate(160%);
+                     border-left: 1px solid var(--border-soft);
+                     z-index: 105;
+                     display: flex;
+                     align-items: center;
+                     transform: translateX(100%);
+                     transition: transform 0.35s var(--ease);
+                     will-change: transform;
+                     box-shadow: -20px 0 60px -20px rgba(0, 0, 0, 0.6);
+              }
+
+              .nav-drawer.is-open {
+                     transform: translateX(0);
+              }
+
+              .nav-drawer-links {
+                     display: flex;
+                     flex-direction: column;
+                     gap: 4px;
+                     padding: 32px;
+                     width: 100%;
+              }
+
+              .nav-drawer-links a {
+                     font-family: var(--font-mono);
+                     font-size: 1rem;
+                     color: var(--text-dim);
+                     padding: 14px 4px;
+                     border-bottom: 1px solid var(--border-soft);
+                     opacity: 0;
+                     transform: translateX(14px);
+                     transition: color 0.2s ease-out;
+              }
+
+              .nav-drawer.is-open .nav-drawer-links a {
+                     animation: drawer-link-in 0.35s var(--ease) forwards;
+              }
+
+              @keyframes drawer-link-in {
+                     to { opacity: 1; transform: translateX(0); }
+              }
+
+              .nav-drawer-links a:hover,
+              .nav-drawer-links a:active {
+                     color: var(--accent);
+              }
+
+              .nav-drawer-backdrop {
+                     position: fixed;
+                     inset: 0;
+                     background: rgba(0, 0, 0, 0.5);
+                     z-index: 104;
+                     opacity: 0;
+                     pointer-events: none;
+                     transition: opacity 0.3s ease-out;
+              }
+
+              .nav-drawer-backdrop.is-open {
+                     opacity: 1;
+                     pointer-events: auto;
+              }
+
+              @media (prefers-reduced-motion: reduce) {
+                     .nav-drawer,
+                     .nav-drawer-backdrop,
+                     .nav-drawer-links a {
+                            transition: none;
+                            animation: none;
+                     }
               }
 
               @media (max-width: 640px) {
@@ -346,9 +494,8 @@
                             display: none !important;
                      }
 
-                     .nav-links-mobile {
-                            display: flex !important;
-                            gap: 16px !important;
+                     .nav-burger {
+                            display: flex;
                      }
               }
 
@@ -428,14 +575,43 @@
                      line-height: 1.06;
                      letter-spacing: -0.035em;
                      max-width: 15ch;
-                     opacity: 0;
-                     animation: fade-up 0.32s var(--ease) 0.06s forwards;
               }
 
               h1 .accent-word {
                      color: var(--accent);
                      font-style: italic;
                      text-shadow: 0 0 34px var(--accent-glow-soft);
+              }
+
+              .split-word {
+                     display: inline-block;
+                     overflow: hidden;
+                     vertical-align: top;
+                     padding-bottom: 0.08em;
+                     margin-bottom: -0.08em;
+              }
+
+              .split-word > span {
+                     display: inline-block;
+                     transform: translateY(110%);
+                     opacity: 0;
+                     will-change: transform, opacity;
+                     animation: word-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+              }
+
+              @keyframes word-rise {
+                     to {
+                            transform: translateY(0);
+                            opacity: 1;
+                     }
+              }
+
+              @media (prefers-reduced-motion: reduce) {
+                     .split-word > span {
+                            animation: none;
+                            transform: none;
+                            opacity: 1;
+                     }
               }
 
               .hero-sub {
@@ -1423,23 +1599,43 @@
                      margin-top: auto;
                      padding-top: 20px;
                      display: flex;
-                     gap: 20px;
+                     gap: 10px;
+                     flex-wrap: wrap;
               }
 
               .project-links a {
                      font-family: var(--font-mono);
-                     font-size: 0.8rem;
+                     font-size: 0.76rem;
                      color: var(--text-dim);
-                     display: flex;
+                     display: inline-flex;
                      align-items: center;
                      gap: 6px;
-                     transition: color 0.2s var(--ease);
-                     border-bottom: 1px solid transparent;
+                     padding: 8px 14px;
+                     border-radius: 100px;
+                     border: 1px solid var(--border);
+                     background: rgba(255, 255, 255, 0.02);
+                     transition: color 0.2s ease-out, border-color 0.2s ease-out, background 0.2s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
               }
 
               .project-links a:hover {
                      color: var(--accent);
                      border-color: var(--accent-dim);
+                     background: var(--accent-glow-soft);
+                     transform: translateY(-1px);
+                     box-shadow: 0 8px 20px -12px var(--accent-glow);
+              }
+
+              .project-links a:first-child {
+                     color: var(--bg);
+                     background: var(--accent);
+                     border-color: var(--accent);
+                     font-weight: 600;
+              }
+
+              .project-links a:first-child:hover {
+                     background: #c4e900;
+                     color: var(--bg);
+                     box-shadow: 0 10px 24px -12px var(--accent-glow);
               }
 
               .project-body p {
@@ -1746,6 +1942,7 @@
 
        <!-- FIXED NAVIGATION BAR -->
        <nav>
+              <div class="scroll-progress" id="scrollProgress"></div>
               <a href="#" class="logo">
                      <span class="symbol">Δ∴</span> Akin
               </a>
@@ -1760,12 +1957,24 @@
                      <a href="https://byakin.github.io/TheAkinProject/News.html" target="_blank" rel="noopener">News</a>
               </div>
 
-              <!-- Mobile Links Layout -->
-              <div class="nav-links nav-links-mobile">
-                     <a href="https://byakin.github.io/TheAkinProject/" target="_blank" rel="noopener">Community</a>
-                     <a href="https://byakin.github.io/TheAkinProject/News.html" target="_blank" rel="noopener">News</a>
-              </div>
+              <!-- Mobile: hamburger trigger -->
+              <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="navDrawer">
+                     <span></span><span></span><span></span>
+              </button>
        </nav>
+
+       <!-- Mobile drawer -->
+       <div class="nav-drawer" id="navDrawer" aria-hidden="true">
+              <div class="nav-drawer-links">
+                     <a href="#work" data-drawer-link>Work</a>
+                     <a href="#log" data-drawer-link>Build Log</a>
+                     <a href="#skills" data-drawer-link>Skills</a>
+                     <a href="#contact" data-drawer-link>Contact</a>
+                     <a href="https://byakin.github.io/TheAkinProject/" target="_blank" rel="noopener" data-drawer-link>Community</a>
+                     <a href="https://byakin.github.io/TheAkinProject/News.html" target="_blank" rel="noopener" data-drawer-link>News</a>
+              </div>
+       </div>
+       <div class="nav-drawer-backdrop" id="navDrawerBackdrop"></div>
 
        <main>
 
@@ -1774,7 +1983,7 @@
                      <div class="hero-parallax" id="heroParallax">
                             <div class="eyebrow"><span class="dot"></span> CURRENTLY BENCHMARKING LLAMA 3.1 &amp; MISTRAL LARGE
                             </div>
-                            <h1>Learning AI engineering <span class="accent-word">in public</span>, one shipped thing at a
+                            <h1 id="heroHeadline" data-split-words>Learning AI engineering <span class="accent-word">in public</span>, one shipped thing at a
                                    time.</h1>
                             <p class="hero-sub">I'm Akin — building <strong>The Akin Project</strong>, a community for
                                    ambitious beginners, alongside <strong>NIMBench</strong>, an NVIDIA NIM benchmarking tool.
@@ -2013,10 +2222,10 @@
                                           <div class="project-status active"><span class="dot"></span> Live</div>
                                           <h3>The Akin Project</h3>
                                           <div class="project-links">
+                                                 <a href="https://byakin.github.io/TheAkinProject/" target="_blank"
+                                                        rel="noopener" data-hover>Visit site ↗</a>
                                                  <a href="https://github.com/ByAkin" target="_blank" rel="noopener"
                                                         data-hover>GitHub ↗</a>
-                                                 <a href="https://byakin.github.io/TheAkinProject/" target="_blank"
-                                                        rel="noopener" data-hover>Community page ↗</a>
                                           </div>
                                    </div>
                                    <div class="project-body">
@@ -2042,9 +2251,9 @@
               <div class="project-status"><span class="dot"></span> Shipped</div>
               <h3>Resume Reviewer</h3>
               <div class="project-links">
+                     <a href="https://byakin.github.io/resume-checker/" target="_blank" rel="noopener" data-hover>Live demo ↗</a>
                      <a href="https://github.com/ByAkin" target="_blank" rel="noopener" data-hover>GitHub ↗</a>
-                     <a href="https://byakin.github.io/resume-checker/" target="_blank" rel="noopener" data-hover>Resume reviewer ↗</a>
-              </div> <!-- Fixed unclosed div here -->
+              </div> 
        </div>
        <div class="project-body">
               <p>A two-pass tool: one API call generates the review, a second fact-checks
@@ -2284,6 +2493,54 @@
                             });
                      }, { threshold: 0.1 });
                      frames.forEach((f) => observer.observe(f));
+              })();
+
+              /* ---------------- Cinematic word-split reveal (vanilla, no dependency) ---------------- */
+              (function () {
+                     const el = document.getElementById('heroHeadline');
+                     if (!el) return;
+                     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+                     function wrapWordsInNode(node) {
+                            const frag = document.createDocumentFragment();
+                            node.childNodes.forEach((child) => {
+                                   if (child.nodeType === Node.TEXT_NODE) {
+                                          const words = child.textContent.split(/(\s+)/);
+                                          words.forEach((w) => {
+                                                 if (w.trim() === '') {
+                                                        frag.appendChild(document.createTextNode(w));
+                                                 } else {
+                                                        const outer = document.createElement('span');
+                                                        outer.className = 'split-word';
+                                                        const inner = document.createElement('span');
+                                                        inner.textContent = w;
+                                                        outer.appendChild(inner);
+                                                        frag.appendChild(outer);
+                                                 }
+                                          });
+                                   } else if (child.nodeType === Node.ELEMENT_NODE) {
+                                          const outer = document.createElement('span');
+                                          outer.className = 'split-word';
+                                          const inner = document.createElement('span');
+                                          inner.className = child.className;
+                                          inner.textContent = child.textContent;
+                                          outer.appendChild(inner);
+                                          frag.appendChild(outer);
+                                   }
+                            });
+                            return frag;
+                     }
+
+                     const fragment = wrapWordsInNode(el);
+                     el.textContent = '';
+                     el.appendChild(fragment);
+
+                     if (!reduceMotion) {
+                            const spans = el.querySelectorAll('.split-word > span');
+                            spans.forEach((s, i) => {
+                                   s.style.animationDelay = `${0.28 + i * 0.045}s`;
+                            });
+                     }
               })();
 
               /* ---------------- Hero parallax (cursor-driven, cheap) ---------------- */
@@ -2719,13 +2976,20 @@
                      });
               })();
 
-              /* ---------------- Glass navbar on scroll ---------------- */
+              /* ---------------- Glass navbar on scroll + progress bar ---------------- */
               (function () {
                      const nav = document.querySelector('nav');
+                     const progress = document.getElementById('scrollProgress');
                      if (!nav) return;
                      let ticking = false;
                      function update() {
                             nav.classList.toggle('nav-scrolled', window.scrollY > 40);
+                            if (progress) {
+                                   const doc = document.documentElement;
+                                   const max = doc.scrollHeight - doc.clientHeight;
+                                   const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+                                   progress.style.width = `${pct}%`;
+                            }
                             ticking = false;
                      }
                      window.addEventListener('scroll', () => {
@@ -2734,6 +2998,42 @@
                                    ticking = true;
                             }
                      }, { passive: true });
+                     update();
+              })();
+
+              /* ---------------- Mobile nav drawer ---------------- */
+              (function () {
+                     const burger = document.getElementById('navBurger');
+                     const drawer = document.getElementById('navDrawer');
+                     const backdrop = document.getElementById('navDrawerBackdrop');
+                     if (!burger || !drawer || !backdrop) return;
+
+                     function openDrawer() {
+                            drawer.classList.add('is-open');
+                            backdrop.classList.add('is-open');
+                            drawer.setAttribute('aria-hidden', 'false');
+                            burger.setAttribute('aria-expanded', 'true');
+                            document.body.style.overflow = 'hidden';
+                     }
+                     function closeDrawer() {
+                            drawer.classList.remove('is-open');
+                            backdrop.classList.remove('is-open');
+                            drawer.setAttribute('aria-hidden', 'true');
+                            burger.setAttribute('aria-expanded', 'false');
+                            document.body.style.overflow = '';
+                     }
+
+                     burger.addEventListener('click', () => {
+                            const isOpen = drawer.classList.contains('is-open');
+                            isOpen ? closeDrawer() : openDrawer();
+                     });
+                     backdrop.addEventListener('click', closeDrawer);
+                     drawer.querySelectorAll('[data-drawer-link]').forEach((link) => {
+                            link.addEventListener('click', closeDrawer);
+                     });
+                     document.addEventListener('keydown', (e) => {
+                            if (e.key === 'Escape') closeDrawer();
+                     });
               })();
        </script>
 
