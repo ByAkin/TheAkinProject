@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News</title>
+
+<style>
+:root{
+    --accent:#B6D800;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,system-ui,sans-serif;
+}
+
+html{scroll-behavior:smooth;}
+
+body{
+    background:#0a0a0a;
+    color:white;
+    line-height:1.6;
+    overflow-x:hidden;
+}
+
+/* ── NAV ── */
+nav{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    z-index:1000;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:18px 40px;
+    background:rgba(10,10,10,0.6);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+.logo{
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:1px;
+    color:var(--accent);
+    transition:opacity 0.2s;
+}
+.logo:hover{opacity:0.8;}
+
+.links{
+    display:flex;
+    align-items:center;
+    gap:24px;
+}
+
+.links a{
+    color:#bbb;
+    text-decoration:none;
+    font-size:0.9rem;
+    transition:all 0.25s ease;
+    position:relative;
+}
+
+.links a:not(.nav-discord)::after{
+    content:'';
+    position:absolute;
+    bottom:-2px;left:0;
+    width:0;height:1px;
+    background:var(--accent);
+    transition:width 0.25s ease;
+}
+.links a:not(.nav-discord):hover::after{width:100%;}
+.links a:hover{color:var(--accent);}
+
+.nav-discord{
+    padding:8px 16px;
+    border-radius:10px;
+    background:#5865F2;
+    color:white !important;
+    font-weight:600;
+    font-size:0.85rem;
+    text-decoration:none;
+    transition:all 0.25s ease;
+    box-shadow:0 4px 15px rgba(88,101,242,0.3);
+}
+.nav-discord:hover{
+    background:var(--accent);
+    color:black !important;
+    box-shadow:0 4px 20px rgba(182,216,0,0.3);
+    transform:translateY(-1px);
+}
+
+/* ── HEADER ── */
+header{
+    padding:150px 5% 50px;
+    text-align:center;
+    position:relative;
+    z-index:1;
+}
+
+header h1{
+    font-size:clamp(2.4rem,7vw,4rem);
+    letter-spacing:-1px;
+    margin-bottom:14px;
+    background:linear-gradient(180deg,#fff,#aaa);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+header p{
+    color:#888;
+    font-size:1rem;
+    max-width:520px;
+    margin:0 auto;
+}
+
+/* ── CONTAINER ── */
+.container{
+    width:90%;
+    max-width:1100px;
+    margin:30px auto 0;
+    position:relative;
+    z-index:1;
+}
+
+.section-title{
+    font-size:1.6rem;
+    margin-bottom:25px;
+    letter-spacing:-0.5px;
+}
+
+/* ── FEATURED ── */
+.featured-idea{
+    background:
+        linear-gradient(135deg, rgba(182,216,0,0.1), rgba(182,216,0,0.02)),
+        rgba(10,10,10,0.92);
+    border:1px solid rgba(182,216,0,0.18);
+    border-radius:22px;
+    padding:36px;
+    margin-bottom:50px;
+    transition:border-color 0.3s ease;
+}
+.featured-idea:hover{border-color:rgba(182,216,0,0.3);}
+
+.featured-tag{
+    color:var(--accent);
+    font-size:0.78rem;
+    letter-spacing:2px;
+    font-weight:700;
+}
+
+.featured-idea h2{
+    margin:14px 0;
+    font-size:clamp(1.5rem,3.5vw,2rem);
+    letter-spacing:-0.5px;
+}
+
+.featured-idea p{
+    color:#aaa;
+    line-height:1.8;
+    font-size:0.95rem;
+}
+
+.insight{
+    margin-top:22px;
+    padding:16px 18px;
+    border-left:3px solid var(--accent);
+    background:rgba(255,255,255,0.02);
+    border-radius:0 12px 12px 0;
+    color:#999;
+    font-size:0.9rem;
+    line-height:1.7;
+}
+
+/* ── NEWS GRID ── */
+.news-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+    gap:18px;
+}
+
+.card{
+    background:#111;
+    border:1px solid #1f1f1f;
+    border-radius:18px;
+    padding:26px;
+    transition:all 0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:rgba(182,216,0,0.3);
+    box-shadow:0 16px 35px rgba(0,0,0,0.3);
+}
+
+.tag{
+    color:var(--accent);
+    font-size:0.78rem;
+    letter-spacing:1px;
+    margin-bottom:10px;
+    display:block;
+    text-transform:uppercase;
+}
+
+.card h3{
+    margin-bottom:12px;
+    font-size:1.05rem;
+    letter-spacing:-0.2px;
+}
+
+.card p{
+    color:#999;
+    line-height:1.65;
+    font-size:0.88rem;
+}
+
+footer{
+    text-align:center;
+    padding:40px 0;
+    color:#444;
+    font-size:0.85rem;
+    border-top:1px solid #1a1a1a;
+    margin-top:60px;
+}
+
+/* ── REVEAL ── */
+.reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.active{
+    opacity:1;
+    transform:translateY(0);
+}
+
+/* ── MOBILE ── */
+@media(max-width:700px){
+    nav{
+        padding:14px 20px;
+    }
+    .links{gap:12px;}
+    .links a{font-size:0.8rem;}
+    .nav-discord{padding:7px 12px;font-size:0.8rem;}
+
+    header{padding:120px 6% 40px;}
+
+    .featured-idea{padding:26px;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;"></canvas>
+
+<nav>
+<div class="logo">AKIN</div>
+<div class="links">
+<a href="https://byakin.github.io/TheAkinProject/">Home</a>
+<a href="https://www.youtube.com/@The_Akin_Project">YouTube</a>
+<a href="https://discord.gg/kYnNsAgM" class="nav-discord">Discord</a>
+</div>
+</nav>
+
+<header class="reveal">
+    <h1>NEWS</h1>
+    <p>Startup news, tech trends, AI updates, and business ideas for builders.</p>
+</header>
+
+<div class="container">
+
+<section class="featured-idea reveal">
+    <span class="featured-tag">TODAY'S OPPORTUNITY</span>
+    <h2>Navigating the Dual IPO Horizon & Liability Cascades</h2>
+    <p>
+        With Anthropic filing its S-1 on June 1 and OpenAI following tightly on June 8, the landscape of AI tech investing is turning public. The massive opportunity right now is building automated, rigorous compliance engines for enterprises navigating the incoming EU AI Act deadlines (August 2) and sovereign cloud deployments. Don't fight the massive frontier labs—help corporations prepare for their governance transition.
+    </p>
+    <div class="insight">
+        <strong>Why it matters:</strong>
+        The recent joint letter to Congress on synthetic DNA screening signed simultaneously by Altman, Amodei, and Hassabis highlights that regulatory risk pooling is the final narrative check before capital markets open. The builders who handle enterprise safety tooling win next.
+    </div>
+</section>
+
+<h2 class="section-title reveal">Latest News</h2>
+
+<div class="news-grid reveal">
+
+    <div class="card">
+        <span class="tag">FUNDING</span>
+        <h3>Prometheus Secures Historic $12B Round</h3>
+        <p>
+            Prometheus, the physical AI startup backed by Jeff Bezos and former top Google executive Vik Bajaj, closed a massive $12 billion funding round pushing its valuation to $41 billion. The firm is building advanced foundational models explicitly designed for industrial tasks, engineering workflows, and drug discovery.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">COMPLIANCE</span>
+        <h3>EU AI Act High-Risk Deadline Looming</h3>
+        <p>
+            Enterprise software engineering teams are facing a tight timeline with the EU AI Act's enforcement deadline for high-risk systems hitting on August 2. Tech teams are scrambling to audit and categorize customer-facing AI agents, automated resume screeners, and financial credit-scoring pipelines to avoid massive fines.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">STARTUP</span>
+        <h3>Sovereign AI Play: Cohere Acquires Reliant AI</h3>
+        <p>
+            Following its merger with Germany's Aleph Alpha, Canadian enterprise powerhouse Cohere has acquired Reliant AI. The consolidation sharpens Cohere's positioning as the dominant sovereign enterprise AI alternative to US tech giants, tailoring models specifically for highly regulated European industries.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">INFRASTRUCTURE</span>
+        <h3>Adam Selipsky Launches Helix Digital with $20B</h3>
+        <p>
+            Former AWS Chief Executive Officer Adam Selipsky has formally re-entered the arena with Helix Digital, a well-backed infrastructure initiative debuting with a massive $20 billion capital pool. The project aims to architect a new blueprint of hardware networks explicitly built for next-generation multi-agent execution.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">COMPUTE</span>
+        <h3>Together AI Secures Nvidia HGX B300 Capacity</h3>
+        <p>
+            Together AI has executed a major multi-year compute infrastructure agreement with provider Rumble. Under the terms, Rumble will actively deploy advanced, liquid-cooled Nvidia HGX B300 systems to supply Together AI with the processing scale needed for cutting-edge generative workloads.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">TALENT</span>
+        <h3>Global Capability Centers Shift Entirely to AI</h3>
+        <p>
+            Recent hiring indices from foundit show a stark turning point in international white-collar hiring: roughly 64% of all new jobs created at Global Capability Centers (GCCs) now strictly mandate data science, intelligent automation, or AI engineering expertise, cementing a shift away from legacy back-office functions.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">OPEN SOURCE</span>
+        <h3>Mistral Drops "Mistral Vibe" Agentic Framework</h3>
+        <p>
+            French AI standout Mistral AI continued its inorganic and organic product blitz by launching Mistral Vibe, a highly specialized, agentic workspace assistant engineered for heavy coding and enterprise writing pipelines, following its strategic acquisition of physical science AI firm Emmi.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">MARKET</span>
+        <h3>Tech Hiring Market Experiences 14% MoM Rebound</h3>
+        <p>
+            After several quarters of prolonged stagnation, active domestic tech job postings registered a welcoming 14% month-on-month surge entering July. The market velocity is driven heavily by product firms and GCCs targeting experienced engineers, offsetting minor reductions in classic IT maintenance roles.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">BIOSECURITY</span>
+        <h3>AI CEOs Push Congress for DNA Screening Laws</h3>
+        <p>
+            In an unprecedented show of alignment, the leaders of OpenAI, Anthropic, Google DeepMind, and Microsoft AI co-signed an open letter to US Congress pushing for mandatory synthesis tracking (S. 3741). They warn that frontier models are lowering technical barriers to biological engineering.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">AGENTS</span>
+        <h3>Cognition Discloses 90% Code Self-Generation</h3>
+        <p>
+            Cognition, the creators of the autonomous engineering agent Devin, revealed that following its recent $1 billion funding round, more than 90% of the company's internal software codebase is now actively generated, tested, and maintained autonomously by Devin itself.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">CYBERSECURITY</span>
+        <h3>Cyera Raises $600M at a $12B Valuation</h3>
+        <p>
+            The massive demand for intelligent security architecture was validated as cloud data security platform Cyera finalized a massive $600 million growth round, lifting its valuation to $12 billion. Cyber teams are leaning on AI to discover and defend sensitive training datasets before bad actors exploit them.
+        </p>
+    </div>
+
+    <div class="card">
+        <span class="tag">FINTECH</span>
+        <h3>ToneTag Deploys AI Merchant Banking Assistant</h3>
+        <p>
+            Fintech innovator ToneTag has launched a specialized conversational banking assistant tailored for commercial merchants. The voice-first system automates retail transactions and parses real-time cash flow analytics entirely over standard voice networks, reducing operational tech drag.
+        </p>
+    </div>
+
+</div>
+
+</div>
+
+<section class="featured-idea reveal" style="margin:60px auto 80px; width:88%; max-width:950px;">
+    <span class="featured-tag">TRENDING</span>
+    <h2>3 Things Builders Should Watch This Week</h2>
+    <p>
+        - Dual IPO preparations from OpenAI and Anthropic transforming venture liquidity models<br>
+        - High-stakes corporate audits intensifying as the August 2 EU AI Act compliance window tightens<br>
+        - Physical AI scaling rapidly into multi-billion-dollar domains led by industrial plays like Prometheus
+    </p>
+    <div class="insight">
+        <strong>Takeaway:</strong>
+        AI infrastructure and compliance are taking absolute center stage over pure prompt experimentation. For builders, creating tools that ensure enterprise reliability, safety, and regulatory compliance is the ultimate arbitrage right now.
+    </div>
+</section>
+
+<footer>
+    © 2026 The Akin Project
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+function revealOnScroll(){
+    reveals.forEach(el => {
+        if(el.getBoundingClientRect().top < window.innerHeight - 80){
+            el.classList.add('active');
+        }
+    });
+}
+window.addEventListener('scroll', revealOnScroll, {passive:true});
+revealOnScroll();
+</script>
+
+<script>
+const c = document.getElementById('bg');
+const ctx = c.getContext('2d');
+let W, H, pts;
+let mouse = { x: -9999, y: -9999 };
+function resize(){ W = c.width = innerWidth; H = c.height = innerHeight; }
+function init(){
+  resize();
+  const isMobile = W < 700;
+  pts = Array.from({length: isMobile ? 50 : 80}, () => ({
+    x: Math.random()*W,
+    y: Math.random()*H,
+    vx: (Math.random()-.5)*.4,
+    vy: (Math.random()-.5)*.4,
+    r: isMobile ? Math.random()*1+0.5 : Math.random()*2+1
+  }));
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  pts.forEach(p => {
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>W) p.vx*=-1;
+    if(p.y<0||p.y>H) p.vy*=-1;
+  });
+  for(let i=0;i<pts.length;i++){
+    for(let j=i+1;j<pts.length;j++){
+      const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y, d=Math.sqrt(dx*dx+dy*dy);
+      if(d<130){
+        const mx=(pts[i].x+pts[j].x)/2, my=(pts[i].y+pts[j].y)/2;
+        const mdist=Math.sqrt((mouse.x-mx)**2+(mouse.y-my)**2);
+        const boost=mdist<200?(1-mdist/200)*0.4:0;
+        ctx.beginPath();
+        ctx.strokeStyle=`rgba(182,216,0,${(1-d/130)*0.15+boost})`;
+        ctx.lineWidth=mdist<200?1.5:1;
+        ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y); ctx.stroke();
+      }
+    }
+  }
+  pts.forEach(p => {
+    const dx=mouse.x-p.x, dy=mouse.y-p.y, dist=Math.sqrt(dx*dx+dy*dy), near=dist<150;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,near?p.r*1.8:p.r,0,Math.PI*2);
+    ctx.fillStyle=near?'rgba(182,216,0,0.8)':'rgba(182,216,0,0.35)';
+    ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+window.addEventListener('resize', resize);
+init();
+draw();
+if(window.innerWidth > 700){
+  document.addEventListener('mousemove', e => { mouse.x=e.clientX; mouse.y=e.clientY; });
+  document.addEventListener('mouseleave', () => { mouse.x=-9999; mouse.y=-9999; });
+}
+</script>
+
+<script>
+(function () {
+  const NEWS_JSON_URL = "news.json"; // same-origin relative path — no CORS issues on GitHub Pages
+  const grid = document.querySelector(".news-grid");
+  if (!grid) return;
+
+  function timeAgo(iso) {
+    if (!iso) return "";
+    const then = new Date(iso).getTime();
+    if (Number.isNaN(then)) return "";
+    const diffMs = Date.now() - then;
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days}d ago`;
+  }
+
+  function escapeHtml(str) {
+    return String(str || "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function buildCard(article) {
+    const card = document.createElement("a");
+    card.className = "card reveal active";
+    card.href = article.url || "#";
+    card.target = "_blank";
+    card.rel = "noopener noreferrer";
+    card.style.display = "block";
+    card.style.textDecoration = "none";
+    card.style.color = "inherit";
+
+    const tagText = (article.category || article.source || "NEWS").toString();
+    const ago = timeAgo(article.publishedAt);
+
+    card.innerHTML = `
+      <span class="tag">${escapeHtml(tagText)}${ago ? " · " + escapeHtml(ago) : ""}</span>
+      <h3>${escapeHtml(article.title)}</h3>
+      <p>${escapeHtml(article.description || "")}</p>
+    `;
+    return card;
+  }
+
+  fetch(NEWS_JSON_URL, { cache: "no-store" })
+    .then((res) => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then((data) => {
+      const articles = Array.isArray(data?.articles) ? data.articles : [];
+      if (!articles.length) return; // keep existing hardcoded cards as fallback
+
+      const fragment = document.createDocumentFragment();
+      articles.forEach((article) => fragment.appendChild(buildCard(article)));
+
+      grid.innerHTML = "";
+      grid.appendChild(fragment);
+    })
+    .catch((err) => {
+      // Fails silently and keeps whatever cards are already in the HTML —
+      // the page never breaks or shows an empty grid because of this.
+      console.warn("News feed unavailable, showing fallback content:", err);
+    });
+})();
+</script>
+
+</body>
+</html>

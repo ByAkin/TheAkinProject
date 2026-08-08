@@ -1,0 +1,80 @@
+<!--
+  News loader — fetches news.json and renders it into the existing
+  .news-grid using the SAME .card / .tag markup and classes already
+  defined in this page's <style>. No CSS changes. No layout changes.
+
+  Insert this <script> block just before the closing </body> tag,
+  after your existing scripts. It replaces the hardcoded <div class="news-grid">
+  content with live articles once news.json loads. If the fetch fails
+  for any reason, the original hardcoded cards already in the HTML
+  stay exactly as-is (nothing is removed until new data is ready).
+-->
+<script>
+(function () {
+  const NEWS_JSON_URL = "news.json"; // same-origin relative path — no CORS issues on GitHub Pages
+  const grid = document.querySelector(".news-grid");
+  if (!grid) return;
+
+  function timeAgo(iso) {
+    if (!iso) return "";
+    const then = new Date(iso).getTime();
+    if (Number.isNaN(then)) return "";
+    const diffMs = Date.now() - then;
+    const mins = Math.floor(diffMs / 60000);
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
+    return `${days}d ago`;
+  }
+
+  function escapeHtml(str) {
+    return String(str || "").replace(/[&<>"']/g, (c) => ({
+      "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+    }[c]));
+  }
+
+  function buildCard(article) {
+    const card = document.createElement("a");
+    card.className = "card reveal active";
+    card.href = article.url || "#";
+    card.target = "_blank";
+    card.rel = "noopener noreferrer";
+    card.style.display = "block";
+    card.style.textDecoration = "none";
+    card.style.color = "inherit";
+
+    const tagText = (article.category || article.source || "NEWS").toString();
+    const ago = timeAgo(article.publishedAt);
+
+    card.innerHTML = `
+      <span class="tag">${escapeHtml(tagText)}${ago ? " · " + escapeHtml(ago) : ""}</span>
+      <h3>${escapeHtml(article.title)}</h3>
+      <p>${escapeHtml(article.description || "")}</p>
+    `;
+    return card;
+  }
+
+  fetch(NEWS_JSON_URL, { cache: "no-store" })
+    .then((res) => {
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then((data) => {
+      const articles = Array.isArray(data?.articles) ? data.articles : [];
+      if (!articles.length) return; // keep existing hardcoded cards as fallback
+
+      const fragment = document.createDocumentFragment();
+      articles.forEach((article) => fragment.appendChild(buildCard(article)));
+
+      grid.innerHTML = "";
+      grid.appendChild(fragment);
+    })
+    .catch((err) => {
+      // Fails silently and keeps whatever cards are already in the HTML —
+      // the page never breaks or shows an empty grid because of this.
+      console.warn("News feed unavailable, showing fallback content:", err);
+    });
+})();
+</script>

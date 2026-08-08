@@ -1,0 +1,35 @@
+{
+  "_comment": "Add/remove feeds per category anytime. category is a free-text label shown as the card TAG. Keep feed URLs to public RSS/Atom endpoints only.",
+  "maxPerCategory": 8,
+  "maxTotal": 24,
+  "categories": {
+    "AI": [
+      "https://openai.com/blog/rss.xml",
+      "https://www.anthropic.com/rss.xml",
+      "https://blog.google/technology/ai/rss/",
+      "https://venturebeat.com/category/ai/feed/"
+    ],
+    "TECH": [
+      "https://techcrunch.com/feed/",
+      "https://www.theverge.com/rss/index.xml",
+      "https://arstechnica.com/feed/"
+    ],
+    "PROGRAMMING": [
+      "https://github.blog/feed/",
+      "https://stackoverflow.blog/feed/",
+      "https://dev.to/feed"
+    ],
+    "STARTUPS": [
+      "https://techcrunch.com/category/startups/feed/",
+      "https://www.ycombinator.com/blog/rss"
+    ],
+    "BUSINESS": [
+      "https://www.reuters.com/technology/rss",
+      "https://feeds.a.dj.com/rss/RSSWSJD.xml"
+    ],
+    "SCIENCE": [
+      "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
+      "https://www.technologyreview.com/feed/"
+    ]
+  }
+}

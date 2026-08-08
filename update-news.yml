@@ -1,0 +1,51 @@
+name: Update News Feed
+
+on:
+  schedule:
+    # Every 30 minutes. GitHub may delay this slightly under load —
+    # that's normal and fine for a news feed.
+    - cron: "*/30 * * * *"
+  workflow_dispatch: {}   # lets you trigger it manually from the Actions tab
+  push:
+    paths:
+      - "feeds.json"       # re-run automatically when you edit your feed list
+      - "scripts/fetch-news.mjs"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-news
+  cancel-in-progress: false
+
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install --no-fund --no-audit
+
+      - name: Fetch news and build news.json
+        run: node scripts/fetch-news.mjs
+
+      - name: Commit and push if news.json changed
+        run: |
+          if git diff --quiet -- news.json; then
+            echo "No changes to news.json — nothing to commit."
+            exit 0
+          fi
+          git config user.name "news-bot"
+          git config user.email "news-bot@users.noreply.github.com"
+          git add news.json
+          git commit -m "chore: update news.json [automated]"
+          git push
