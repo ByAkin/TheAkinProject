@@ -1,4 +1,5 @@
 /* ---------------- Custom cursor + spotlight ---------------- */
+
               (function () {
                      if (window.matchMedia('(hover: none)').matches) return;
 
