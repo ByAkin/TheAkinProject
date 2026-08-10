@@ -24,6 +24,7 @@
                      --shadow-lift: 0 12px 32px -12px rgba(0, 0, 0, 0.5);
               }
 
+
               a:focus-visible,
               button:focus-visible {
                      outline: none;
