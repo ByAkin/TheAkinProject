@@ -14,6 +14,15 @@
               rel="stylesheet">
 
        <link rel="stylesheet" href="portfolio.css">
+       <script>
+              (function () {
+                     try {
+                            if (localStorage.getItem('akin-theme') === 'light') {
+                                   document.documentElement.setAttribute('data-theme', 'light');
+                            }
+                     } catch (e) {}
+              })();
+       </script>
 
 </head>
 
@@ -44,10 +53,18 @@
                      <a href="https://byakin.github.io/TheAkinProject/News.html" target="_blank" rel="noopener">News</a>
               </div>
 
-              <!-- Mobile: hamburger trigger -->
-              <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="navDrawer">
-                     <span></span><span></span><span></span>
-              </button>
+              <div class="nav-right">
+                     <button class="theme-toggle" id="themeToggle" aria-label="Switch to light theme" aria-pressed="false" data-hover>
+                            <span class="theme-toggle-track">
+                                   <span class="theme-toggle-thumb"></span>
+                            </span>
+                     </button>
+
+                     <!-- Mobile: hamburger trigger -->
+                     <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="navDrawer">
+                            <span></span><span></span><span></span>
+                     </button>
+              </div>
        </nav>
 
        <!-- Mobile drawer -->
