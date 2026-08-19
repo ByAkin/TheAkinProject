@@ -1,5 +1,38 @@
-/* ---------------- Custom cursor + spotlight ---------------- */
+/* ---------------- Theme toggle (dark / light) ---------------- */
+              (function () {
+                     const STORAGE_KEY = 'akin-theme';
+                     const root = document.documentElement;
+                     const toggle = document.getElementById('themeToggle');
 
+                     function apply(theme) {
+                            if (theme === 'light') {
+                                   root.setAttribute('data-theme', 'light');
+                            } else {
+                                   root.removeAttribute('data-theme');
+                            }
+                            if (toggle) {
+                                   toggle.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+                                   toggle.setAttribute('aria-label', theme === 'light' ? 'Switch to dark theme' : 'Switch to light theme');
+                            }
+                            window.dispatchEvent(new CustomEvent('theme-change', { detail: { theme } }));
+                     }
+
+                     let saved = null;
+                     try { saved = localStorage.getItem(STORAGE_KEY); } catch (e) {}
+                     const initial = saved === 'light' ? 'light' : 'dark';
+                     apply(initial);
+
+                     if (toggle) {
+                            toggle.addEventListener('click', () => {
+                                   const current = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+                                   const next = current === 'light' ? 'dark' : 'light';
+                                   apply(next);
+                                   try { localStorage.setItem(STORAGE_KEY, next); } catch (e) {}
+                            });
+                     }
+              })();
+
+              /* ---------------- Custom cursor + spotlight ---------------- */
               (function () {
                      if (window.matchMedia('(hover: none)').matches) return;
 
@@ -394,6 +427,16 @@
                      let w, h, stars = [], links = [];
                      let mouseX = null, mouseY = null;
                      let running = true;
+                     let starRGB = '182, 216, 0';
+
+                     function readAccentRGB() {
+                            const hex = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+                            const m = hex.match(/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
+                            if (!m) return;
+                            starRGB = `${parseInt(m[1], 16)}, ${parseInt(m[2], 16)}, ${parseInt(m[3], 16)}`;
+                     }
+                     readAccentRGB();
+                     window.addEventListener('theme-change', readAccentRGB);
 
                      function resize() {
                             w = window.innerWidth;
@@ -472,7 +515,7 @@
 
                                    ctx.beginPath();
                                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                                   ctx.fillStyle = `rgba(182, 216, 0, ${p.alpha})`;
+                                   ctx.fillStyle = `rgba(${starRGB}, ${p.alpha})`;
                                    ctx.fill();
                             }
 
@@ -486,7 +529,7 @@
                                                  ctx.beginPath();
                                                  ctx.moveTo(stars[i].x, stars[i].y);
                                                  ctx.lineTo(stars[j].x, stars[j].y);
-                                                 ctx.strokeStyle = `rgba(182, 216, 0, ${0.05 * t})`;
+                                                 ctx.strokeStyle = `rgba(${starRGB}, ${0.05 * t})`;
                                                  ctx.lineWidth = 1;
                                                  ctx.stroke();
                                           }
